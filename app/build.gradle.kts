@@ -5,6 +5,16 @@ plugins {
     id("kotlin-parcelize")
 }
 
+// 辅助函数：获取签名版本配置（环境变量优先）
+fun getSigningVersion(envVar: String, defaultValue: Boolean): Boolean {
+    val envValue = System.getenv(envVar)
+    if (envValue != null) {
+        return envValue.toBoolean()
+    }
+    val propValue = project.findProperty(envVar) as String?
+    return propValue?.toBoolean() ?: defaultValue
+}
+
 android {
     namespace = "xmzai.mizhoubaobei.top"
     compileSdk = 35
@@ -85,17 +95,6 @@ android {
         }
     }
 }
-
-// 辅助函数：获取签名版本配置（环境变量优先）
-fun getSigningVersion(envVar: String, defaultValue: Boolean): Boolean {
-    val envValue = System.getenv(envVar)
-    if (envValue != null) {
-        return envValue.toBoolean()
-    }
-    val propValue = project.findProperty(envVar) as String?
-    return propValue?.toBoolean() ?: defaultValue
-}
-
 
     buildFeatures {
         viewBinding = true
