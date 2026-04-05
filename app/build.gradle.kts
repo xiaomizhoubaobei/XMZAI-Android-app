@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.newAi302.app"
+    namespace = "xmzai.mizhoubaobei.top"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.newAi302.app"
+        applicationId = "xmzai.mizhoubaobei.top"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

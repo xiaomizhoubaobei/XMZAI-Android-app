@@ -119,13 +119,13 @@
                 android:layout_below="@+id/view">
 
                 <!--密码注册-->
-                <com.newAi302.app.widget.view.RegisterEmailInputView
+                <xmzai.mizhoubaobei.top.widget.view.RegisterEmailInputView
                     android:id="@+id/email_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <!--手机号码注册-->
-                <com.newAi302.app.widget.view.RegisterPhoneInputView
+                <xmzai.mizhoubaobei.top.widget.view.RegisterPhoneInputView
                     android:id="@+id/phone_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

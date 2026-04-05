@@ -178,7 +178,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:orientation="horizontal">
-                    <com.newAi302.app.view.VoiceWaveMikeView
+                    <xmzai.mizhoubaobei.top.view.VoiceWaveMikeView
                         android:id="@+id/voiceWaveNewView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -395,7 +395,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/bottomTv"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
-                    <com.newAi302.app.view.VoiceWaveView
+                    <xmzai.mizhoubaobei.top.view.VoiceWaveView
                         android:id="@+id/voiceWaveView"
                         android:layout_width="200dp"
                         android:layout_height="25dp"

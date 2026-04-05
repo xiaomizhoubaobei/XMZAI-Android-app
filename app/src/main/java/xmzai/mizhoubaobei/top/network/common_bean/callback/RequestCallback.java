@@ -1,0 +1,49 @@
+/**
+ * @fileoverview RequestCallback 网络模块
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 网络请求相关组件
+ */
+
+package xmzai.mizhoubaobei.top.network.common_bean.callback;
+
+
+import  xmzai.mizhoubaobei.top.network.common_bean.exception.NetException;
+
+/**
+ * author : lzh
+ * e-mail : luozhanhang@adswave.com
+ * time   : 2024/7/1
+ * desc   : 请求Callback
+ * version: 1.0
+ */
+public abstract class RequestCallback<T> {
+
+    //请求前
+    public void onStart() {
+    }
+
+    //请求成功
+    public abstract void onSuccess(T data);
+
+
+    //请求完成
+    public void onCompleted() {
+    }
+
+    //请求失败
+    public abstract void onError(NetException e);
+
+    //进度
+    public void onProgress(long downSize, long fileSize) {
+    }
+
+    public void dowloadSuccess(String path, String fileName, long fileSize) {
+    }
+
+    public void imgSuccess(byte[] bytes){
+
+    }
+}

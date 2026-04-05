@@ -93,7 +93,7 @@
 
     </RelativeLayout>
 
-    <com.newAi302.app.widget.view.PhoneLocationView
+    <xmzai.mizhoubaobei.top.widget.view.PhoneLocationView
         android:id="@+id/rl_phone_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -112,14 +112,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.newAi302.app.widget.view.VerificationEditResTextView
+        <xmzai.mizhoubaobei.top.widget.view.VerificationEditResTextView
             android:id="@+id/verification_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_toStartOf="@+id/verifyCodeView" />
 
-        <com.newAi302.app.widget.view.VerifyCodeView
+        <xmzai.mizhoubaobei.top.widget.view.VerifyCodeView
             android:id="@+id/verifyCodeView"
             android:layout_width="100dp"
             android:layout_height="40dp"
@@ -178,13 +178,13 @@
 
     </RelativeLayout>
 
-    <com.newAi302.app.widget.view.PassWorkResEditView
+    <xmzai.mizhoubaobei.top.widget.view.PassWorkResEditView
         android:id="@+id/rl_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hint="@string/email_password" />
 
-    <com.newAi302.app.widget.view.PassWorkResEditView
+    <xmzai.mizhoubaobei.top.widget.view.PassWorkResEditView
         android:id="@+id/rl_password_again"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

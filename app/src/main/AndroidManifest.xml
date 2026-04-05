@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.newAi302.app">
+    package="xmzai.mizhoubaobei.top">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -120,7 +120,7 @@
             android:screenOrientation="portrait" /> <!-- FileProvider 配置 -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.newAi302.app.fileprovider"
+            android:authorities="xmzai.mizhoubaobei.top.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

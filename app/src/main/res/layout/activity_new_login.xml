@@ -129,7 +129,7 @@
                 android:layout_below="@+id/view">
 
                 <!--密码登录-->
-                <com.newAi302.app.widget.view.LoginEmailInputView
+                <xmzai.mizhoubaobei.top.widget.view.LoginEmailInputView
                     android:id="@+id/email_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
                     tools:visibility="visible"/>
 
                 <!--手机号码登录-->
-                <com.newAi302.app.widget.view.LoginPhoneInputView
+                <xmzai.mizhoubaobei.top.widget.view.LoginPhoneInputView
                     android:id="@+id/phone_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.newAi302.app.widget.view.PhoneLocationView
+    <xmzai.mizhoubaobei.top.widget.view.PhoneLocationView
         android:id="@+id/rl_phone_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 
-    <com.newAi302.app.widget.view.PassWorkEditView
+    <xmzai.mizhoubaobei.top.widget.view.PassWorkEditView
         android:id="@+id/rl_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_below="@+id/rl_phone_location" />
 
-    <com.newAi302.app.widget.view.VerificationEditTextView
+    <xmzai.mizhoubaobei.top.widget.view.VerificationEditTextView
         android:id="@+id/verification_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:layout_toStartOf="@+id/verifyCodeView"
         android:layout_marginTop="5dp"/>
 
-    <com.newAi302.app.widget.view.VerifyCodeView
+    <xmzai.mizhoubaobei.top.widget.view.VerifyCodeView
         android:id="@+id/verifyCodeView"
         android:layout_width="100dp"
         android:layout_height="50dp"
