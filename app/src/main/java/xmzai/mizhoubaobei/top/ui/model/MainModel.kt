@@ -17,7 +17,6 @@ import xmzai.mizhoubaobei.top.bean.ProxySecretBean
 import xmzai.mizhoubaobei.top.network.NetConfig
 import xmzai.mizhoubaobei.top.network.NetworkUtil
 import xmzai.mizhoubaobei.top.network.common_bean.callback.LoginCallback
-import xmzai.mizhoubaobei.top.network.common_bean.callback.AliPayData
 import xmzai.mizhoubaobei.top.network.common_bean.bean.BaseResponse
 import xmzai.mizhoubaobei.top.network.common_bean.callback.RequestCallback
 import xmzai.mizhoubaobei.top.network.common_bean.callback.ResponseCallback
@@ -115,24 +114,6 @@ object MainModel {
                     callback.onError(e)
                 }
             })
-    }
-
-    fun getAliPayUrl(payway_id:Int,callback: LoginCallback){
-        NetworkUtil.getInstance().executePostAllRaw4(NetConfig.URL_ALIPAY_GET_URL,
-            payway_id,
-            callback)
-    }
-
-    fun getUstdurl(payway_id:Int,callback: LoginCallback){
-        NetworkUtil.getInstance().executePostAllRaw5(NetConfig.URL_USTD_GET_URL,
-            payway_id,
-            callback)
-    }
-
-    fun getStripeKey(payway_id: Int,callback: LoginCallback){
-        NetworkUtil.getInstance().executePostAllRaw6(NetConfig.URL_USTD_GET_URL,
-            payway_id,
-            callback)
     }
 
 }

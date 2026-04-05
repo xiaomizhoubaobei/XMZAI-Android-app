@@ -23,7 +23,6 @@ interface IMenuBarViewListener {
     fun onStaticTraffic() //静态IP 按流量计费
     fun onStaticIp()  //静态IP 按IP计费
     fun onQuickAccess() //快速访问
-    fun onTopUp() //充值
     fun onPersonalCenter() //个人中心
     fun onHelpCenter() //帮助中心
     fun onLogout() //登出

@@ -75,12 +75,6 @@ class NetConfig {
         val URL_FORWARD_DOMAIN = "/api/forward/domain" //获取中转域名的接口
 
         @JvmField
-        val URL_ALIPAY_GET_URL = "/proxy/charges/alipay"
-
-        @JvmField
-        val URL_USTD_GET_URL = "/api/epay/"
-
-        @JvmField
         val URL_PROXY_GET_APK: String = "/api/v1/app/version"
     }
 }

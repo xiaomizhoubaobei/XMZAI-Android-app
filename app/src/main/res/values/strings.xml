@@ -72,8 +72,6 @@
     <string name="setting_title_message">Settings</string>
     <string name="setting_account_message">302.AI ID</string>
     <string name="setting_balance_message">Balance</string>
-    <string name="setting_consumption_details_message">Consumption details</string>
-    <string name="setting_top_up_message">Top up</string>
     <string name="setting_language_message">Language</string>
     <string name="setting_theme_message">Theme</string>
     <string name="setting_preference_message">Preferences</string>
@@ -185,26 +183,6 @@
 
     <string name="select_text_title_message">Please select text</string>
 
-    <string name="pay_text_title_message">Recharge Center</string>
-    <string name="pay_text_explanation_message">Purchase Instructions
-\n1. Handling Fees: Alipay 3.4% + $0.5 | Credit Card 3.4% + $0.5 | USDT 1.3% (Large-amount wire transfers and automatic top-ups are waived)
-\n2. Invoice Service: Invoices are available for domestic corporate transfers, back-end top-ups, and international transfers. Contact your account manager for details.
-\nNotes
-\nAlipay and USDT top-ups take approximately 5-15 minutes to process. Please be patient. Refresh the page after 15 minutes. If your funds have not been credited, please contact customer service.
-\nPTC Description
-\nPTC is a token provided by 302.AI for purchases on 302.AI. 1 PTC = 1 USD, approximately 7 RMB. You can purchase PTC according to the purchase rules first, and then use "PTC" to purchase 302.AI products or services. Once the PTC is purchased, no refunds will be accepted.</string>
-    <string name="pay_text_protocol_title_message">Recharge Agreement</string>
-    <string name="pay_text_hot_message">Hot Sale</string>
-    <string name="pay_text_recommend_message">Recommend</string>
-    <string name="pay_text_recharge_instructions_message">Recharge Instructions：</string>
-    <string name="pay_text_next_message">Next step</string>
-    <string name="pay_text_gift_message">handsel 20PTC</string>
-    <string name="pay_text_agree_message">Payment means reading and agreeing</string>
-    <string name="pay_text_pay_protocol_message">《User Recharge Agreement》</string>
-    <string name="pay_text_pay_actual_message">Actual amount paid</string>
-    <string name="pay_text_pay_now_message">Pay now</string>
-    <string name="pay_text_pay_toast_message">Please select the payment amount first</string>
-    <string name="pay_text_pay_way_toast_message">Please select payment method first</string>
     <string name="copy_code_toast_message">Copy code</string>
     <string name="thinking_over_message">Thinking Completed</string>
 
@@ -242,16 +220,6 @@
     <string name="get_title_message">英文</string>
     <string name="get_title_message1">6个英文单词</string>
 
-    <string name="Consumption_details_title_message">Consumption details</string>
-    <string name="consumption_account_balance_message">Account balance</string>
-    <string name="consumption_today_message">Consumption today</string>
-    <string name="consumption_month_message">Consumption this month</string>
-    <string name="consumption_historical_message">Historical consumption</string>
-    <string name="consumption_session_title_message">Session title</string>
-    <string name="consumption_kb_message">Knowledge base name</string>
-    <string name="consumption_file_message">Archives</string>
-    <string name="consumption_incognito_session_message">Incognito session</string>
-    <string name="consumption_account_recharge_message">Account recharge</string>
 
 
     <string name="app_name_long" translatable="false">NekoBox for Android</string>
@@ -364,7 +332,6 @@
     <string name="connect_success">Connection successful</string>
     <string name="connect_fail">Connection failed</string>
 
-    <string name="pay_details">Please select payment method</string>
 
 
     <string name="toast_loading">loading..</string>
@@ -388,13 +355,6 @@
     <string name="no_agree_error">Please read and agree to the User Terms and Privacy Agreement.</string>
     <string name="confirm">confirm</string>
     <string name="ipinfo">Check IP</string>
-    <string name="payBtn">Payment</string>
-    <string name="payMessage">Notice:The recharge process of Alipay and USDT takes about 5-15 minutes, please wait patiently. Refresh the page after 15 minutes. If the funds are still not received, please contact customer service.</string>
-    >
-    <string name="ailipayBtn">Alipay</string>
-    <string name="stripepayBtn">credit card</string>
-    <string name="usdtpayBtn">USDT</string>
-    <string name="bankCardId">Please enter your bank card number below</string>
     <string name="version_title">A new version is available</string>
     <string name="version_message">Do you want to update to the latest version?</string>
     <string name="version_message1">Please update to the latest version.</string>

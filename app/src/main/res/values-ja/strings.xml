@@ -72,8 +72,6 @@
     <string name="setting_title_message">設定</string>
     <string name="setting_account_message">302.AI ID</string>
     <string name="setting_balance_message">残高</string>
-    <string name="setting_consumption_details_message">使用量の詳細</string>
-    <string name="setting_top_up_message">チャージ</string>
     <string name="setting_language_message">言語</string>
     <string name="setting_theme_message">テーマ</string>
     <string name="setting_preference_message">設定</string>
@@ -185,26 +183,6 @@
 
     <string name="select_text_title_message">テキストを選択してください</string>
 
-    <string name="pay_text_title_message">リチャージセンター</string>
-    <string name="pay_text_explanation_message">購入手順
-\n1. 手数料：Alipay 3.4% + $0.5 | クレジットカード 3.4% + $0.5 | USDT 1.3%（高額電信送金および自動チャージは免除されます）
-\n2. 請求書発行サービス：国内法人送金、バックエンドチャージ、国際送金で請求書をご利用いただけます。詳細はアカウントマネージャーにお問い合わせください。
-\n注意事項
-\nAlipayおよびUSDTチャージの処理には約5～15分かかります。しばらくお待ちください。15分後にページを更新してください。資金が入金されていない場合は、カスタマーサービスまでご連絡ください。
-\nPTCの説明
-\nPTCは、302.AIでの購入に使用できる302.AIが提供するトークンです。1 PTC = 1 USD、約7人民元です。購入ルールに従ってPTCを購入し、その後「PTC」を使用して302.AIの製品またはサービスをご購入いただけます。PTC購入後の返金はできません。</string>
-    <string name="pay_text_protocol_title_message">再充電契約</string>
-    <string name="pay_text_hot_message">ホットセール</string>
-    <string name="pay_text_recommend_message">特別推薦</string>
-    <string name="pay_text_recharge_instructions_message">充電手順：</string>
-    <string name="pay_text_next_message">次のステップ</string>
-    <string name="pay_text_gift_message">贈り物 20PTC</string>
-    <string name="pay_text_agree_message">支払いは読んで同意することを意味します</string>
-    <string name="pay_text_pay_protocol_message">《ユーザーリチャージ契約》</string>
-    <string name="pay_text_pay_actual_message">実際に支払った金額</string>
-    <string name="pay_text_pay_now_message">今すぐ支払う</string>
-    <string name="pay_text_pay_toast_message">まずお支払い金額を選択してください</string>
-    <string name="pay_text_pay_way_toast_message">まずお支払い方法を選択してください</string>
     <string name="copy_code_toast_message">コードをコピー</string>
     <string name="thinking_over_message">思考完了</string>
 
@@ -241,16 +219,6 @@
     <string name="get_title_message">日语</string>
     <string name="get_title_message1">6个日语单词</string>
 
-    <string name="Consumption_details_title_message">消費量の詳細</string>
-    <string name="consumption_account_balance_message">口座残高</string>
-    <string name="consumption_today_message">今日の消費量</string>
-    <string name="consumption_month_message">今月の消費量</string>
-    <string name="consumption_historical_message">過去の消費量</string>
-    <string name="consumption_session_title_message">セッションタイトル</string>
-    <string name="consumption_kb_message">ナレッジベース名</string>
-    <string name="consumption_file_message">アーカイブ</string>
-    <string name="consumption_incognito_session_message">シークレットセッション</string>
-    <string name="consumption_account_recharge_message">アカウントのリチャージ</string>
 
     <string name="proxy_message1">‌読了同意</string>
     <string name="proxy_message2">および</string>
@@ -329,7 +297,6 @@
     <string name="connect_success">Connection successful</string>
     <string name="connect_fail">Connection failed</string>
 
-    <string name="pay_details">Please select payment method</string>
 
 
     <string name="toast_loading">loading..</string>
@@ -354,12 +321,6 @@
     <string name="confirm">confirm</string>
     <string name="cancel">cancel</string>
     <string name="ipinfo">Check IP</string>
-    <string name="payBtn">Payment</string>
-    <string name="payMessage">注：AlipayおよびUSDTでの入金には約5～15分かかります。しばらくお待ちください。15分後にページを更新してください。それでも資金が入金されない場合は、カスタマーサービスまでお問い合わせください。</string>>
-    <string name="ailipayBtn">Alipay</string>
-    <string name="stripepayBtn">クレジットカード</string>
-    <string name="usdtpayBtn">USDT</string>
-    <string name="bankCardId">下記に銀行カード番号を入力してください</string>
     <string name="version_title">新しいバージョンが利用可能です</string>
     <string name="version_message">最新バージョンに更新しますか？</string>
     <string name="version_message1">最新バージョンに更新してください。</string>

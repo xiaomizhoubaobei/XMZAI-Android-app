@@ -64,21 +64,6 @@ data class HtmlProxyJsonBean(
     val rotationLoading: Boolean = false
 ) : Parcelable
 
-//去充值
-@Parcelize
-data class HtmlChargeJsonBean(
-    val id: Int = 0,
-    val payway: String = "",
-    val note: String = "",
-    val en_note: String = "",
-    val price: Long = 0,
-    val service_fee: Double = 0.0,
-    val extra_value: Int = 0,
-    val tag: String = "",
-    val en_tag: String = "",
-    val isSelect: Boolean = false
-) : Parcelable
-
 //快速访问
 @Parcelize
 data class HtmlQuickAccessBean(

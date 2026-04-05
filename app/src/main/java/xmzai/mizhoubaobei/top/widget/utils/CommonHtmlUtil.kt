@@ -29,7 +29,6 @@ class CommonHtmlUtil {
         val staticTrafficHtmlPath = "/webapp/proxy/static/traffic"  //静态IP  - 按流量计费
         val staticIpHtmlPath = "/webapp/proxy/static/ip" //静态IP  - 按IP计费
         val quickAccessHtmlPath = "/webapp/quick-access"   //快捷访问
-        val chargeHtmlPath = "/webapp/charge"  //充值
         val userCenterHtmlPath = "/webapp/user-center"  //个人中心
         val helpCenterHtmlPath = "https://proxy302.helplook.com/"  //帮助中心
 
@@ -42,7 +41,6 @@ class CommonHtmlUtil {
         val proxyHtml = "proxy"  //代理
         val goLinkHtml = "goLink" //链接
         val quickAccessHtml = "quick-access" //快速访问
-        val chargeHtml = "charge" //去充值
 
         val changeStatusHtml = "change-status"//开关某一代理
         val deleteStatusHtml = "delete-proxy"
