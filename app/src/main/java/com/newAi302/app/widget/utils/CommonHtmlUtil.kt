@@ -1,3 +1,12 @@
+/**
+ * @fileoverview CommonHtmlUtil 工具类
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 工具方法集合，提供通用功能支持
+ */
+
 package com.newAi302.app.widget.utils
 
 /**

@@ -1,3 +1,12 @@
+/**
+ * @fileoverview CookiePersistor 网络模块
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 网络请求相关组件
+ */
+
 package com.newAi302.app.network.cookie.persistence;
 
 import java.util.Collection;

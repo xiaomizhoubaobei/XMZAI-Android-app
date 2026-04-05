@@ -1,3 +1,12 @@
+/**
+ * @fileoverview ModelTypeManager302aiAdapter 适配器
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark RecyclerView 适配器，用于ModelTypeManager302aiAdapter的数据展示与绑定
+ */
+
 package com.newAi302.app.adapter
 
 import android.annotation.SuppressLint

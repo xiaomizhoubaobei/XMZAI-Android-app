@@ -1,3 +1,12 @@
+/**
+ * @fileoverview RenameDialog 对话框
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 自定义对话框组件
+ */
+
 package com.newAi302.app.dialog
 
 /**

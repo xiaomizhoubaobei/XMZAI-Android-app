@@ -1,3 +1,12 @@
+/**
+ * @fileoverview ChatViewModel 视图模型
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark ViewModel，管理界面数据和业务逻辑
+ */
+
 package com.newAi302.app.viewModel
 
 import android.content.Context

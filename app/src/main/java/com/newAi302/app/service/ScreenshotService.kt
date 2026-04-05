@@ -1,3 +1,12 @@
+/**
+ * @fileoverview ScreenshotService 服务
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark Android Service 组件
+ */
+
 package com.newAi302.app.service
 
 import android.annotation.SuppressLint

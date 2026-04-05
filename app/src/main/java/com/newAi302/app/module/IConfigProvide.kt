@@ -1,3 +1,12 @@
+/**
+ * @fileoverview IConfigProvide 模块
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 功能模块实现
+ */
+
 package com.newAi302.app.module
 
 /**

@@ -1,3 +1,12 @@
+/**
+ * @fileoverview BasePresenter 基础组件
+ * @author 祁筱欣
+ * @date 2026-04-05
+ * @since 2026-04-05
+ * @LICENSE AGPL-3.0 license
+ * @remark 基础框架组件，提供公共功能
+ */
+
 package com.newAi302.app.base.mvp
 
 import android.os.Bundle
