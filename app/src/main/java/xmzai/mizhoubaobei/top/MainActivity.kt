@@ -370,7 +370,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 }else{
                     isTrueApiKey = false
                 }
-            }:run {
+            } ?: run {
                 isTrueApiKey = false
             }
         }
