@@ -43,6 +43,7 @@ class CustomToast private constructor(
         val textView = layout.findViewById<TextView>(R.id.toast_text)
         textView.text = message
 
+        @Suppress("DEPRECATION")
         toast.view = layout
         toast.show()
     }

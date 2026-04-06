@@ -269,6 +269,7 @@ class SettingActivity : BaseActivity() {
                     val intent = intent // 获取当前Activity的启动意图
                     finish() // 销毁当前Activity
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) // 重建Activity
+                    @Suppress("DEPRECATION")
                     overridePendingTransition(0, 0) // 可选：去除切换动画
                 }
 
@@ -280,6 +281,7 @@ class SettingActivity : BaseActivity() {
                     val intent = intent // 获取当前Activity的启动意图
                     finish() // 销毁当前Activity
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) // 重建Activity
+                    @Suppress("DEPRECATION")
                     overridePendingTransition(0, 0) // 可选：去除切换动画
                 }
 
@@ -291,6 +293,7 @@ class SettingActivity : BaseActivity() {
                     val intent = intent // 获取当前Activity的启动意图
                     finish() // 销毁当前Activity
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) // 重建Activity
+                    @Suppress("DEPRECATION")
                     overridePendingTransition(0, 0) // 可选：去除切换动画
                 }
 
@@ -746,6 +749,7 @@ class SettingActivity : BaseActivity() {
         val intent = intent // 获取当前Activity的启动意图
         finish() // 销毁当前Activity
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) // 重建Activity
+        @Suppress("DEPRECATION")
         overridePendingTransition(0, 0) // 可选：去除切换动画
     }
 

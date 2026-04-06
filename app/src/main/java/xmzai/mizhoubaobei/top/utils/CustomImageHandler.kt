@@ -302,6 +302,7 @@ class CustomImgTagHandler(
         }
 
         // 透明度模式（半透明，适配 View 背景）
+        @Suppress("DEPRECATION")
         override fun getOpacity(): Int = android.graphics.PixelFormat.TRANSLUCENT
     }
 

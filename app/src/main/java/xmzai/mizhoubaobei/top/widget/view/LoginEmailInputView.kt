@@ -79,6 +79,7 @@ class LoginEmailInputView(context: Context, attrs: AttributeSet? = null) :
     private fun initView() {
         val deviceModel = Build.MODEL
         android.util.Log.e("ceshi","闪退:$deviceModel")
+        @Suppress("CONDITION_ALWAYS_TRUE_OR_FALSE")
         android.util.Log.e("ceshi","0闪退:${mBinding.rlLoginGoogle==null}")
         Log.e("ceshi", "rlLoginGoogle: ${mBinding.rlLoginGoogle}")
         if (deviceModel == "2411DRN47C"){

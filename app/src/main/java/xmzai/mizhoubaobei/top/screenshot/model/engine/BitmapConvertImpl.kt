@@ -180,6 +180,7 @@ class BitmapConvertImpl : IBitmapConvert {
     private fun webViewConvert(webView: WebView, callBack: IBitmapConvertCallBack?) {
         var contBmp: Bitmap?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            @Suppress("DEPRECATION")
             val scale = webView.scale
             val width = webView.width
             val height = (webView.contentHeight * scale + 0.5).toInt()
@@ -189,6 +190,7 @@ class BitmapConvertImpl : IBitmapConvert {
             contBmp = bitmap
         } else {
             //获取Picture对象
+            @Suppress("DEPRECATION")
             val picture = webView.capturePicture()
             //得到图片的宽和高（没有reflect图片内容）
             val width = picture.width
