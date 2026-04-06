@@ -1592,7 +1592,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
         }
 
-        }
     }
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
