@@ -28,7 +28,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import xmzai.mizhoubaobei.top.R
 import xmzai.mizhoubaobei.top.bean.ProxyApkBean
-import xmzai.mizhoubaobei.top.databinding.ActivityPersonalCenterBinding
 import xmzai.mizhoubaobei.top.databinding.ActivityVersionUpdateBinding
 import xmzai.mizhoubaobei.top.network.common_bean.bean.BaseResponse
 import xmzai.mizhoubaobei.top.network.common_bean.callback.RequestCallback

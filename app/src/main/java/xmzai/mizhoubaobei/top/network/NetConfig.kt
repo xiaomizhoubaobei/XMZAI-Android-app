@@ -24,5 +24,8 @@ class NetConfig {
 
         @JvmField
         val URL_PROXY_GET_APK: String = "/api/v1/app/version"
+
+        @JvmField
+        val URL_PROXY_SECRET: String = "/api/proxy/secret"
     }
 }

@@ -32,6 +32,8 @@ public class NetException extends RuntimeException {
 
     public static String OVER_RATE_LIMIT_ERROR = "429"; // http状态码为429了（超出了请求频次）
 
+    public static String VERIFICATION_CODE_ERROR = "A014"; // 验证码错误
+
     public String code; // -101 服务器异常（返回数据为空）
     public String message;
 
