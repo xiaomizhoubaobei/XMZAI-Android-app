@@ -280,7 +280,13 @@ fun savingBitmapIntoFile(context: Context?, bitmap: Bitmap?, callBack: IScreenSh
             } catch (e: Exception) {
                 e.printStackTrace()
                 dialog.dismiss()
-                callBack?.onResult(null)
+                // 异常时仍返回ScreenBitmap对象(与原else分支行为一致),避免调用方NPE
+                val screenBitmap = ScreenBitmap()
+                screenBitmap.apply {
+                    this.bitmap = bitmap
+                    this.filePath = fileReturnPath
+                }
+                callBack?.onResult(screenBitmap)
             }
     })
     thread.start()

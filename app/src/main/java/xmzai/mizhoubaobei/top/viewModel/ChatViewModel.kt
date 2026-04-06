@@ -683,13 +683,17 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             val assistantMessage = response.data?.url
 
-            // 使用安全调用处理可能的null值
-            val safeUrl = assistantMessage ?: ""
-            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeUrl)}")//https://api.302.ai/v1/audio/transcriptions
+            // 使用安全调用处理可能的null值,并校验非空
+            val safeUrl = assistantMessage?.takeIf { it.isNotEmpty() }
+            if (safeUrl == null) {
+                Log.w("ceshi", "返回的URL为空或null")
+            }
+            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeUrl ?: "")}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-                // 直接使用assistantMessage（已通过?:处理null）
-                imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(safeUrl))
+                // 在主线程更新 UI - 仅当URL有效时传递给UI层
+                safeUrl?.let { url ->
+                    imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(url))
+                }
             }
         }catch (e: SocketTimeoutException) {
             viewModelScope.launch(Dispatchers.Main) {
@@ -734,13 +738,17 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             val assistantMessage = response.data?.avatar_url
 
-            // 使用安全调用处理可能的null值
-            val safeAvatarUrl = assistantMessage ?: ""
-            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeAvatarUrl)}")//https://api.302.ai/v1/audio/transcriptions
+            // 使用安全调用处理可能的null值,并校验非空
+            val safeAvatarUrl = assistantMessage?.takeIf { it.isNotEmpty() }
+            if (safeAvatarUrl == null) {
+                Log.w("ceshi", "返回的avatar_url为空或null")
+            }
+            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeAvatarUrl ?: "")}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-                // 直接使用safeAvatarUrl（已通过?:处理null）
-                imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(safeAvatarUrl))
+                // 在主线程更新 UI - 仅当URL有效时传递给UI层
+                safeAvatarUrl?.let { url ->
+                    imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(url))
+                }
             }
         }catch (e: SocketTimeoutException) {
             viewModelScope.launch(Dispatchers.Main) {
