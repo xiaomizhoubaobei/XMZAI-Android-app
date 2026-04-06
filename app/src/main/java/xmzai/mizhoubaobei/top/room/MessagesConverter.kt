@@ -54,15 +54,15 @@ class MessagesConverter {
         .registerTypeAdapter(MutableList::class.java, StringToListAdapter()) // 注册适配器
         .create()
 
-    // 处理 ChatMessage 列表的转换（不变）
+    // 处理 ChatMessage 列表的转换（支持 MutableList 精确匹配）
     @TypeConverter
-    fun fromMessagesList(messages: List<ChatMessage>): String {
+    fun fromMessagesList(messages: MutableList<ChatMessage>): String {
         return gson.toJson(messages)
     }
 
     @TypeConverter
-    fun toMessagesList(messagesString: String): List<ChatMessage> {
-        val type: Type = object : TypeToken<List<ChatMessage>>() {}.type
+    fun toMessagesList(messagesString: String): MutableList<ChatMessage> {
+        val type: Type = object : TypeToken<MutableList<ChatMessage>>() {}.type
         return gson.fromJson(messagesString, type)
     }
 

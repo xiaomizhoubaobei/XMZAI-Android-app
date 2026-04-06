@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.devtools.ksp)
-    alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
 }
 
@@ -29,52 +28,33 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    // 检查是否配置了 Release 签名所需的全部凭证
+    val hasReleaseCredentials = listOf(
+        System.getenv("RELEASE_STORE_FILE") ?: project.findProperty("RELEASE_STORE_FILE"),
+        System.getenv("RELEASE_STORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD"),
+        System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS"),
+        System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD")
+    ).none { it == null }
+
     signingConfigs {
-        create("release") {
-            // 优先级：环境变量 > gradle.properties
-            // 这样支持 CI/CD 自动化构建和本地开发两种场景
-            
-            val envStoreFile = System.getenv("RELEASE_STORE_FILE")
-            val envStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
-            val envKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
-            val envKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
-            
-            val propStoreFile = project.findProperty("RELEASE_STORE_FILE") as String?
-            val propStorePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String?
-            val propKeyAlias = project.findProperty("RELEASE_KEY_ALIAS") as String?
-            val propKeyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String?
-            
-            // 确定最终使用的配置值
-            val finalStoreFile = envStoreFile ?: propStoreFile ?: "keystore/release.keystore"
-            val finalStorePassword = envStorePassword ?: propStorePassword
-            val finalKeyAlias = envKeyAlias ?: propKeyAlias
-            val finalKeyPassword = envKeyPassword ?: propKeyPassword
-            
-            // 验证必要参数
-            if (finalStoreFile == null) {
-                error("签名配置错误：未找到密钥库文件路径。请设置环境变量 RELEASE_STORE_FILE 或在 gradle.properties 中设置 RELEASE_STORE_FILE")
+        if (hasReleaseCredentials) {
+            create("release") {
+                // 优先级：环境变量 > gradle.properties
+                val envStoreFile = System.getenv("RELEASE_STORE_FILE")
+                val envStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                val envKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                val envKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+
+                storeFile = file(envStoreFile ?: project.findProperty("RELEASE_STORE_FILE") as String)
+                storePassword = envStorePassword ?: project.findProperty("RELEASE_STORE_PASSWORD") as String
+                keyAlias = envKeyAlias ?: project.findProperty("RELEASE_KEY_ALIAS") as String
+                keyPassword = envKeyPassword ?: project.findProperty("RELEASE_KEY_PASSWORD") as String
+
+                enableV1Signing = getSigningVersion("ENABLE_V1_SIGNING", true)
+                enableV2Signing = getSigningVersion("ENABLE_V2_SIGNING", true)
+                enableV3Signing = getSigningVersion("ENABLE_V3_SIGNING", true)
+                enableV4Signing = getSigningVersion("ENABLE_V4_SIGNING", true)
             }
-            if (finalStorePassword == null) {
-                error("签名配置错误：未找到密钥库密码。请设置环境变量 RELEASE_STORE_PASSWORD 或在 gradle.properties 中设置 RELEASE_STORE_PASSWORD")
-            }
-            if (finalKeyAlias == null) {
-                error("签名配置错误：未找到密钥别名。请设置环境变量 RELEASE_KEY_ALIAS 或在 gradle.properties 中设置 RELEASE_KEY_ALIAS")
-            }
-            if (finalKeyPassword == null) {
-                error("签名配置错误：未找到密钥密码。请设置环境变量 RELEASE_KEY_PASSWORD 或在 gradle.properties 中设置 RELEASE_KEY_PASSWORD")
-            }
-            
-            // 应用配置
-            storeFile = file(finalStoreFile)
-            storePassword = finalStorePassword
-            keyAlias = finalKeyAlias
-            keyPassword = finalKeyPassword
-            
-            // 签名版本控制（支持环境变量和 gradle.properties）
-            enableV1Signing = getSigningVersion("ENABLE_V1_SIGNING", true)
-            enableV2Signing = getSigningVersion("ENABLE_V2_SIGNING", true)
-            enableV3Signing = getSigningVersion("ENABLE_V3_SIGNING", true)
-            enableV4Signing = getSigningVersion("ENABLE_V4_SIGNING", true)
         }
     }
 
@@ -85,16 +65,20 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Release 构建强制使用签名配置
-            signingConfig = signingConfigs.getByName("release")
+            // 有签名凭证时使用 release 签名，否则回退到 debug 签名
+            signingConfig = if (hasReleaseCredentials) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
-        
+
         debug {
-            // Debug 构建使用默认 debug 签名
             signingConfig = signingConfigs.getByName("debug")
         }
     }
 
+    buildFeatures {
         viewBinding = true
     }
 
