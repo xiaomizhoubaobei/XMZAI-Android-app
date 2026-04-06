@@ -41,7 +41,6 @@ import xmzai.mizhoubaobei.top.http.processChatStream
 import xmzai.mizhoubaobei.top.utils.StringObjectUtils
 import xmzai.mizhoubaobei.top.utils.SystemUtils
 import com.google.gson.Gson
-import xmzai.mizhoubaobei.top.http.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -73,7 +72,6 @@ class ChatViewModel :ViewModel(){
     val voiceToTextResult = MutableLiveData<String?>()
     val imageUrlServiceResult = MutableLiveData<String?>()
     //val apiService = NetworkFactory.createApiService(ApiService::class.java)
-    val userInfoResult = MutableLiveData<UserInfo>()
 
     val loadCodeResult = MutableLiveData<String?>()
 
@@ -392,37 +390,6 @@ class ChatViewModel :ViewModel(){
     }
 
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun getUserInfo(token:String,apiService:ApiService){
-        Log.e("ceshi","获取到的token：$token")
-        val authorizationToken = "Bearer $token"//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Basic MTQ1MzE2NzI4N0BxcS5jb206cDhaU21HS1g6Umc="//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Bearer sk-4ogGTjSn67pc9RREx3wOxpquTnF1vIKJN6nRVk4z8jteyfkd"
-        try {
-            val response = apiService.getUserInfo(
-                authorization = authorizationToken
-            )
-            // 处理返回的响应数据
-            viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-              Log.e("ceshi","返回用户数据为：${response.data.api_key}")
-                userInfoResult.postValue(response.data)
-            }
-        } catch (e: HttpException) {
-            // 处理 HTTP 错误
-        } catch (e: IOException) {
-            // 处理网络错误
-        } catch (e: retrofit2.HttpException){
-            Log.e("ceshi","错误：${e.toString()}")
-            //modelListResult.postValue(modelListNull)
-        } catch (e: IllegalArgumentException) {
-            // 处理异常
-            Log.e("Network", "无效的 Authorization 头: ${e.message}")
-
-            // 可选：提供默认值或执行恢复逻辑
-        }
-
-    }
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     suspend fun loadCode(token:String,apiService:ApiService,code:String){

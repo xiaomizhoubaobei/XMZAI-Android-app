@@ -13,16 +13,9 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.core.content.ContextCompat
 import androidx.databinding.library.BuildConfig
-import com.github.lzyzsd.jsbridge.BridgeWebView
 import xmzai.mizhoubaobei.top.network.httpconfig.HostConfigProvide
 import xmzai.mizhoubaobei.top.utils.LanguageUtil
 import xmzai.mizhoubaobei.top.utils.Utils
@@ -42,50 +35,6 @@ import com.tencent.mmkv.MMKV
 class MyApplication:Application() {
     // 活跃 Activity 的数量
     private var activeActivityCount = 0
-    // 预加载的 WebView 实例（使用 lazy 延迟初始化，避免启动时阻塞）
-    val preloadedWebView by lazy {
-        createPreloadedWebView(this)
-    }
-
-    /**
-     * 创建并配置预加载的 WebView
-     */
-    private fun createPreloadedWebView(context: Context): BridgeWebView {
-        return BridgeWebView(context).apply {
-            // 基础配置（复用你代码中的设置）
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
-            settings.loadsImagesAutomatically = true
-            settings.useWideViewPort = true
-            settings.loadWithOverviewMode = true
-            settings.setGeolocationEnabled(true)
-
-
-            // 缓存策略优化（预加载时提前缓存资源）
-            settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-            @Suppress("DEPRECATION")
-            settings.databaseEnabled = true
-
-            setAlpha(1.0f)
-            // 背景设置（避免黑屏）
-            setBackgroundColor(Color.WHITE)
-            background = ContextCompat.getDrawable(context, android.R.color.white)
-
-            // TLS 和混合内容配置（复用你代码中的逻辑）
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            }
-
-            // 预加载时暂时设置基础 WebViewClient（使用时可覆盖）
-            webViewClient = object : WebViewClient() {
-                // 预加载阶段不需要拦截逻辑，留空即可
-            }
-
-            val html = "https://dash.302.ai/sso/login?app=302+AI+Studio&name=302+AI+Studio&icon=https://file.302.ai/gpt/imgs/5b36b96aaa052387fb3ccec2a063fe1e.png&weburl=https://302.ai/&redirecturl=https://dash.302.ai/dashboard/overview&lang=zh-CN"
-            // 可选：预加载一个轻量页面（如空白页），避免首次使用时白屏
-            loadUrl(html)//"about:blank"
-        }
-    }
 
     override fun attachBaseContext(base: Context) {
         // 初始化时应用保存的语言设置
@@ -95,8 +44,6 @@ class MyApplication:Application() {
 
     override fun onTerminate() {
         super.onTerminate()
-        // 应用退出时销毁 WebView，避免内存泄漏
-        preloadedWebView.destroy()
     }
 
     companion object {

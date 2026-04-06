@@ -41,7 +41,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.annotation.RequiresExtension
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -88,7 +87,6 @@ import xmzai.mizhoubaobei.top.utils.ToastUtils
 import xmzai.mizhoubaobei.top.utils.ViewAnimationUtils
 import xmzai.mizhoubaobei.top.utils.base.WearData
 import xmzai.mizhoubaobei.top.utils.base.WearUtil
-import xmzai.mizhoubaobei.top.viewModel.ChatViewModel
 import xmzai.mizhoubaobei.top.widget.utils.CommonEnum
 import xmzai.mizhoubaobei.top.widget.utils.CommonHtmlUtil
 import kotlinx.coroutines.Dispatchers
@@ -116,7 +114,6 @@ class SettingActivity : BaseActivity() {
     private var mUserId = ""
     private var isNewChat = false
 
-    private val chatViewModel: ChatViewModel by viewModels()
     private val BASE_URL = "https://api.302.ai/"
     private var CUSTOMIZE_URL_TWO = "https://api.siliconflow.cn/"
     private var apiService = NetworkFactory.createApiService(ApiService::class.java,BASE_URL)
@@ -162,31 +159,13 @@ class SettingActivity : BaseActivity() {
         if (newChat != null){
            isNewChat = newChat
         }
-        chatViewModel.userInfoResult.observe(this){
-            it.let {
-                binding.userBalanceTv.text = it.balance.toString()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    // 方法1：使用内置的CircleCrop变换
-                    Glide.with(this@SettingActivity)
-                        .load(it.avatar)
-                        .apply(RequestOptions.circleCropTransform())
-                        .placeholder(android.R.drawable.ic_menu_gallery)
-                        .error(android.R.drawable.stat_notify_error)
-                        .into(binding.imageProfile)
-                }
-                lifecycleScope.launch(Dispatchers.IO) {
-                    dataStoreManager.saveUserBalance(it.balance)
-                    dataStoreManager.saveImageUrl(it.avatar)
-                }
-            }
-        }
         initView()
     }
 
     override fun onStop() {
         super.onStop()
         lifecycleScope.launch(Dispatchers.IO) {
-            val userId = dataStoreManager.readUserEmailData.first()?:""
+            val userId = ""  // 用户认证已移除，使用空字符串
             var userConfigurationRoom = chatDatabase.chatDao().getUserConfigByUserId(userId)
             userConfigurationRoom?.appEmojisData = defaultEmoji
             userConfigurationRoom?.systemLanguage = defaultSystemLanguage
@@ -416,15 +395,17 @@ class SettingActivity : BaseActivity() {
             insertUserConfiguration()
             lifecycleScope.launch(Dispatchers.IO) {
                 dataStoreManager.saveData("")
-                WearData.getInstance().saveToken("")
-                WearData.getInstance().saveGetModelList(false)
+                dataStoreManager.saveImageUrl("")
+                // 清理模型列表
+                val emptyList:MutableList<String> = mutableListOf("gemini-2.5-flash-nothink")
+                dataStoreManager.saveModelList(emptyList)
             }
             val botMsg = getString(R.string.front_page_bottom_message)
             val welMsg = getString(R.string.front_page_message)
             val sendMsg = getString(R.string.chat_edit_message)
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("come_from","setting")
-            intent.putExtra("msg_setting",MainMessage(welMsg,sendMsg,botMsg,readImageUrl))
+            intent.putExtra("msg_setting",MainMessage(welMsg,sendMsg,botMsg,""))
             startActivity(intent)
             finish()
         }
@@ -488,30 +469,6 @@ class SettingActivity : BaseActivity() {
 
             }
 
-            val readUserNameData = dataStoreManager.readUserNameData.first()
-            readUserNameData?.let {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    Log.e("setting","readUserNameData：$it")
-                    binding.userSettingTv.text = it
-                }
-            }
-
-            val readUserBalanceData = dataStoreManager.readUserBalanceData.first()
-            readUserBalanceData?.let {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    Log.e("setting","readUserNameData：$it")
-                    binding.userBalanceTv.text = it.toString()
-                }
-            }
-
-            val readUserEmailData = dataStoreManager.readUserEmailData.first()
-            readUserEmailData?.let {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    Log.e("setting","readUserEmailData：$it")
-                    binding.userIdSettingTv.text = it
-                    mUserId = readUserEmailData
-                }
-            }
 
 
 
@@ -789,7 +746,7 @@ class SettingActivity : BaseActivity() {
             dataStoreManager.saveSlideBottomSwitch(false)
             dataStoreManager.saveUseTracelessSwitch(false)
             dataStoreManager.saveBuildTitleTimeData("第一次对话")
-            dataStoreManager.saveUserEmail("")
+            //dataStoreManager.saveUserEmail("")  // 用户认证已移除
         }
 
 

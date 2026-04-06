@@ -135,7 +135,6 @@ import xmzai.mizhoubaobei.top.utils.ImageToGalleryUtil
 import xmzai.mizhoubaobei.top.utils.LanguageUtil
 import xmzai.mizhoubaobei.top.utils.PermissionUtils
 import xmzai.mizhoubaobei.top.utils.ScreenUtils.getScreenHeight
-import xmzai.mizhoubaobei.top.utils.base.WearData
 import io.noties.markwon.Markwon
 import io.noties.markwon.core.CorePlugin
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
@@ -360,11 +359,20 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         //TtsManagerUtils.initTts(this)
         chatTime = TimeUtils.getCurrentDateTime()
         initObserver()
-        if (WearData.getInstance().token != ""){
-            isTrueApiKey = true
-            binding.modeTypeTv.visibility = View.VISIBLE
-        }else{
-            isTrueApiKey = false
+        lifecycleScope.launch(Dispatchers.IO) {
+            val data = dataStoreManager.readData.first()
+            data?.let {
+                if(it.isNotEmpty()){
+                    isTrueApiKey = true
+                    lifecycleScope.launch(Dispatchers.Main){
+                        binding.modeTypeTv.visibility = View.VISIBLE
+                    }
+                }else{
+                    isTrueApiKey = false
+                }
+            }:run {
+                isTrueApiKey = false
+            }
         }
         initData()
         initView()
@@ -417,29 +425,27 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onResume() {
         super.onResume()
-        Log.e("ceshi","onResume获取到${WearData.getInstance().token != ""}")
-        Log.e("ceshi","onResume获取到0${WearData.getInstance().getModelList}")
-        if (WearData.getInstance().getModelList){
-            isTrueApiKey = true
-            lifecycleScope.launch(Dispatchers.IO) {
-                val modelListFlow = dataStoreManager.modelListFlow.first()
-                modelListFlow.let {
-                    modelList = CopyOnWriteArrayList(it)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val data = dataStoreManager.readData.first()
+            data?.let {
+                if(it.isNotEmpty()){
+                    isTrueApiKey = true
+                    lifecycleScope.launch(Dispatchers.Main){
+                        binding.modeTypeTv.visibility = View.VISIBLE
+                    }
+                }else{
+                    isTrueApiKey = false
+                    lifecycleScope.launch(Dispatchers.Main){
+                        binding.modeTypeTv.visibility = View.GONE
+                    }
+                }
+            }?:run {
+                isTrueApiKey = false
+                lifecycleScope.launch(Dispatchers.Main){
+                    binding.modeTypeTv.visibility = View.GONE
                 }
             }
-            binding.modeTypeTv.visibility = View.VISIBLE
-
-        }else{
-            isTrueApiKey = false
-            binding.modeTypeTv.visibility = View.GONE
         }
-
-        /*if (WearData.getInstance().token != ""){
-            isTrueApiKey = true
-            binding.modeTypeTv.visibility = View.VISIBLE
-        }else{
-            isTrueApiKey = false
-        }*/
         //applyLanguage()
         // 每次 resume 时都确保只保留当前页面
         ActivityManager.finishAllExcept(this)
@@ -482,7 +488,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         }
         binding.chatTitleTv.text = chatTitle
         lifecycleScope.launch(Dispatchers.IO) {
-            chatViewModel.getUserInfo( WearData.getInstance().token,apiService)
             val data = dataStoreManager.readData.first()
             data?.let {
                 Log.e("ceshi","appKey是多少：$it")
@@ -903,7 +908,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                    Toast.makeText(this, ContextCompat.getString(this@MainActivity, R.string.can_not_send_empty_toast_message), Toast.LENGTH_SHORT).show()
                }
            }else{
-               toLogin()
+               showNoApikeyToast()
            }
         }
 
@@ -947,7 +952,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                     binding.drawerLayout.openDrawer(Gravity.LEFT)
                 }
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
 
 
@@ -991,7 +996,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             if (isTrueApiKey){
                 buildNewChat(true)
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
         }
 
@@ -1020,7 +1025,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             if (isTrueApiKey){
                 showBottomSheetMoreDialog()
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
 
         }
@@ -1030,7 +1035,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             if (isTrueApiKey){
                 showBottomSheetMoreFunctionDialog()
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
 
         }
@@ -1045,7 +1050,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                     chatTitle = selectedChatTitle.chatTitle
                 }
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
 
         }
@@ -1060,7 +1065,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 binding.inputWordsLine.visibility = View.GONE
                 binding.voiceCon.visibility = View.VISIBLE
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
         }
         binding.keyBoardImage.setOnClickListener {
@@ -1208,7 +1213,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
                 }
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
 
         }
@@ -1593,9 +1598,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            delay(500)
-            chatViewModel.getUserInfo( WearData.getInstance().token,apiService)
         }
     }
 
@@ -1808,7 +1810,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             }else{
                 isTrueApiKey = true
                 binding.modeTypeTv.visibility = View.VISIBLE
-                WearData.getInstance().saveGetModelList(true)
 
             }
 
@@ -1873,40 +1874,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                         lifecycleScope.launch(Dispatchers.Main) {
                             binding.modeTypeTv.visibility = View.VISIBLE
                         }
-                    }
-
-
-                }
-            }
-        }
-
-        chatViewModel.userInfoResult.observe(this){
-            it.let {
-                apiKey = it.api_key
-                binding.userName.text = it.user_name
-                // 方法1：使用内置的CircleCrop变换
-                Glide.with(this@MainActivity)
-                    .load(it.avatar)
-                    .apply(RequestOptions.circleCropTransform())
-                    .placeholder(android.R.drawable.ic_menu_gallery)
-                    .error(android.R.drawable.stat_notify_error)
-                    .into(binding.userImage)
-                lifecycleScope.launch(Dispatchers.IO) {
-                    dataStoreManager.saveData(apiKey)
-                    dataStoreManager.saveUserName(it.user_name)
-                    dataStoreManager.saveUserBalance(it.balance)
-                    dataStoreManager.saveImageUrl(it.avatar)
-                    if (it.email == ""){
-                        userId = it.phone
-                        insertUserConfiguration(it.phone)
-                    }else{
-                        userId = it.email
-                        insertUserConfiguration(it.email)
-                    }
-
-                    if (!isTrueApiKey || MyApplication.isFirstLaunch){
-                        MyApplication.isFirstLaunch = false
-                        chatViewModel.get302AiModelList(it.api_key,apiService)
                     }
 
 
@@ -2325,7 +2292,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                     Toast.makeText(this, ContextCompat.getString(this@MainActivity, R.string.can_not_send_empty_toast_message), Toast.LENGTH_SHORT).show()
                 }
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
         }
 
@@ -3642,8 +3609,13 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
     }
 
 
+    private fun showNoApikeyToast(){
+        Toast.makeText(this, "请先配置API Key", Toast.LENGTH_SHORT).show()
+    }
+
     private fun toLogin(){
         // 302用户管理系统已移除，登录功能不再可用
+        showNoApikeyToast()
     }
 
     private fun showRenameDialog(position: Int,oldName:String) {
@@ -3760,7 +3732,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 // true 表示消费该长按事件（后续不会触发其他长按相关事件）
                 // false 表示不消费，可能导致父布局或其他监听器处理
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
             true
         }
@@ -3770,7 +3742,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             if (isTrueApiKey){
                 Toast.makeText(this, ContextCompat.getString(this@MainActivity, R.string.voice_short_can_not_message), Toast.LENGTH_SHORT).show()
             }else{
-                toLogin()
+                showNoApikeyToast()
             }
         }
 

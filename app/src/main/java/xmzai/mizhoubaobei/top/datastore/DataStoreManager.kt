@@ -69,10 +69,6 @@ class DataStoreManager(private val context: Context) {
 
     private val IS_CHANGE_MODEL_SETTING = booleanPreferencesKey("is_change_Model_Setting")
 
-    private val USER_NAME = stringPreferencesKey("user_name")
-    private val USER_EMAIL = stringPreferencesKey("user_email")
-    private val USER_BALANCE = doublePreferencesKey("user_balance")
-
     private val BUILD_TITLE_SWITCH = booleanPreferencesKey("build_title_switch")
     private val USE_TRACELESS_SWITCH = booleanPreferencesKey("use_traceless_switch")
     private val SLIDE_BOTTOM_SWITCH = booleanPreferencesKey("slide_bottom_switch")
@@ -303,23 +299,6 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
-    suspend fun saveUserName(data: String) {
-        context.dataStore.edit { preferences ->
-            preferences[USER_NAME] = data
-        }
-    }
-
-    suspend fun saveUserBalance(data: Double) {
-        context.dataStore.edit { preferences ->
-            preferences[USER_BALANCE] = data
-        }
-    }
-
-    suspend fun saveUserEmail(data: String) {
-        context.dataStore.edit { preferences ->
-            preferences[USER_EMAIL] = data
-        }
-    }
 
     suspend fun saveTemporaryModelType(data: String) {
         context.dataStore.edit { preferences ->
@@ -497,20 +476,6 @@ class DataStoreManager(private val context: Context) {
             preferences[ANTHROPIC_API_KEY]
         }
 
-    val readUserNameData: Flow<String?> = context.dataStore.data
-        .map { preferences ->
-            preferences[USER_NAME]
-        }
-
-    val readUserBalanceData: Flow<Double?> = context.dataStore.data
-        .map { preferences ->
-            preferences[USER_BALANCE]
-        }
-
-    val readUserEmailData: Flow<String?> = context.dataStore.data
-        .map { preferences ->
-            preferences[USER_EMAIL]
-        }
 
     val readTemporaryModelType: Flow<String?> = context.dataStore.data
         .map { preferences ->

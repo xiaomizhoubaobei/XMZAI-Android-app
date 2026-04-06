@@ -69,15 +69,6 @@ interface ApiService {
         @retrofit2.http.Query("chat") chat : String
     ) : ModelListResponse
 
-    @GET("https://dash-api.302.ai/user/info")
-    suspend fun getUserInfo(
-        @Header("Accept") accept: String = "application/json",
-        @Header("Authorization") authorization: String,
-        @Header("Content-Type") contentType: String = "application/json"
-    ) : UserInfoResponse
-
-
-
 
     @Multipart  // 关键修复：添加多部分表单注解
     @POST("/v1/audio/transcriptions")
@@ -108,15 +99,6 @@ interface ApiService {
         val is_download: Boolean
     )
 
-    @Multipart
-    @PUT("https://dash-api.302.ai/user/avatar/update")
-    suspend fun uploadImageUser(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("need_compress") needCompress: Boolean
-    ): UploadImageResponseUser
-
-
 }
 
 data class ModelListResponse(
@@ -126,21 +108,6 @@ data class ModelListResponse(
     val error:ErrorData
 )
 
-data class UserInfoResponse(
-    val data:UserInfo,
-    //val `object`:String
-    //val objectType: String = "list"
-    val code: Int,
-    val msg: String
-)
-data class UserInfo(
-    val api_key: String,
-    val user_name: String,
-    val email: String,
-    val phone: String,
-    val balance: Double,
-    val avatar: String
-)
 
 data class LoadCodeResponse(
     val result:LoadCodeInfo,
@@ -365,16 +332,6 @@ data class UploadData(
     val encoding: String
 )
 
-data class UploadImageResponseUser(
-    val code: Int,
-    val msg: String,
-    val data: UploadDataUser?
-)
-
-data class UploadDataUser(
-    val avatar_url: String,
-    val encoding: String
-)
 
 // 图片分析请求模型
 data class ChatRequestImage(
