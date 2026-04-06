@@ -4164,6 +4164,4 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         chatViewModel.questionDeepAllResult.removeObserver(questionDeepAllObserver)
         chatViewModel.questionTitleResult.removeObserver(questionTitleObserver)
     }
-
-
 }
