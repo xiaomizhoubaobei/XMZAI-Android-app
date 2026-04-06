@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-parcelize")
 }
 
@@ -143,10 +144,10 @@ dependencies {
     //kotlin coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
     //room
-    implementation("androidx.room:room-runtime:2.4.3")
-    kapt("androidx.room:room-compiler:2.4.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
     implementation("com.google.code.gson:gson:2.8.0")
-    implementation("androidx.room:room-ktx:2.4.3")
+    implementation("androidx.room:room-ktx:2.6.1")
     //recycleView item侧滑栏
     implementation("com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1")
 
