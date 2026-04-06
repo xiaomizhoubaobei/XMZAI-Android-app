@@ -80,7 +80,7 @@ jobs:
         SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
 
         # 生成变更日志
-        cat > release_notes.md << 'EOF'
+        cat > release_notes.md << EOF
         ## 📱 MZAI Release Notes
 
         **版本**: v${{ steps.version.outputs.version_name }}
