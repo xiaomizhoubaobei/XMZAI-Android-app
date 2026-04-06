@@ -1,4 +1,5 @@
-@fileoverview BitmapUtils 工具类
+/**
+ * @fileoverview BitmapUtils 工具类
  * @author 祁筱欣
  * @date 2026-04-05
  * @since 2026-04-05
@@ -6,6 +7,8 @@
  * @remark 工具方法集合，提供通用功能支持
  */
 
+// TODO: ProgressDialog 和 ACTION_MEDIA_SCANNER_SCAN_FILE 已弃用，
+// 后续应迁移至 ProgressBar 和 MediaScannerConnection.scanFile()
 @file:Suppress("DEPRECATION")
 
 package xmzai.mizhoubaobei.top.screenshot.utils

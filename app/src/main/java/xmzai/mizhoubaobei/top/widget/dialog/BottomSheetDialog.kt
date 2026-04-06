@@ -53,6 +53,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
             settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             // 启用 HTML5 缓存（如 localStorage、IndexedDB）
             settings.domStorageEnabled = true
+            // TODO: databaseEnabled 已弃用，domStorageEnabled 已覆盖 HTML5 存储需求，可考虑移除
             @Suppress("DEPRECATION")
             settings.databaseEnabled = true
             // 1. 支持 TLS 1.0~1.3（适配低版本 Android）

@@ -43,6 +43,7 @@ class CustomToast private constructor(
         val textView = layout.findViewById<TextView>(R.id.toast_text)
         textView.text = message
 
+        // TODO: Toast.view 已弃用，待迁移至 Snackbar 或自定义 Toast 实现
         @Suppress("DEPRECATION")
         toast.view = layout
         toast.show()

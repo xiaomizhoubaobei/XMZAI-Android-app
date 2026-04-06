@@ -1,12 +1,11 @@
-@fileoverview GoogleLogin 界面
+/**
+ * @fileoverview GoogleLogin 界面
  * @author 祁筱欣
  * @date 2026-04-05
  * @since 2026-04-05
  * @LICENSE AGPL-3.0 license
  * @remark Activity 或界面页面，处理用户交互和界面逻辑
  */
-
-@file:Suppress("DEPRECATION")
 
 package xmzai.mizhoubaobei.top.ui.thirdloginsdk
 
@@ -43,6 +42,8 @@ import java.security.cert.CertificateException
  * desc   :
  * version: 1.0
  */
+// TODO: Google Sign-In API 已弃用，待迁移至 Credential Manager API
+// 参考：https://developer.android.com/identity/sign-in/credential-manager
 class GoogleLogin : IXLogin {
 
     private val G_LOGIN_REQ = 0x0001

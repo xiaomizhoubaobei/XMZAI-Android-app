@@ -575,14 +575,12 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                @Suppress("CONDITION_ALWAYS_TRUE_OR_FALSE")
-                if (response.result.file != null){
-                    if (!response.result.file.url.isNullOrEmpty()){
-                        Log.e("ceshi","载入代码返回数据为：${response.result.file.url}")
-                        loadCodeResult.postValue(response.result.file.url)
-                    }
-
-                }else{
+                // 使用安全调用链处理 JSON 反序列化可能产生的 null 值
+                val fileUrl = response.result.file?.url
+                if (!fileUrl.isNullOrEmpty()) {
+                    Log.e("ceshi", "载入代码返回数据为：$fileUrl")
+                    loadCodeResult.postValue(fileUrl)
+                } else {
                     loadCodeResult.postValue("nothing")
                 }
 
@@ -627,12 +625,8 @@ class ChatViewModel :ViewModel(){
             Log.e("ceshi","0返回数据：${response.text}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                @Suppress("CONDITION_ALWAYS_TRUE_OR_FALSE")
-                // assistantMessage 已从 response.text 获取，此处直接使用（允许为null时跳过）
-                if (assistantMessage != null) {
-                    // 可以在这里更新 UI 显示结果
-                    voiceToTextResult.postValue(assistantMessage)
-                }
+            // response.text 类型声明为非空，直接使用即可
+            voiceToTextResult.postValue(assistantMessage)
             }
         }catch (e: SocketTimeoutException) {
             viewModelScope.launch(Dispatchers.Main) {

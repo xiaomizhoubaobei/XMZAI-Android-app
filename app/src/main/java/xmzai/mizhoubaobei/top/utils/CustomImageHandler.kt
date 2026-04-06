@@ -301,7 +301,7 @@ class CustomImgTagHandler(
             view.background?.colorFilter = colorFilter
         }
 
-        // 透明度模式（半透明，适配 View 背景）
+        // TODO: getOpacity() 已弃用，升级 compileSdk 至 33+ 后可使用 getAlpha() 替代
         @Suppress("DEPRECATION")
         override fun getOpacity(): Int = android.graphics.PixelFormat.TRANSLUCENT
     }

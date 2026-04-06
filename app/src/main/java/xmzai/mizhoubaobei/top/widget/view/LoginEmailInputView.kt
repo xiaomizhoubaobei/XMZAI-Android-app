@@ -78,26 +78,16 @@ class LoginEmailInputView(context: Context, attrs: AttributeSet? = null) :
 
     private fun initView() {
         val deviceModel = Build.MODEL
-        android.util.Log.e("ceshi","闪退:$deviceModel")
-        @Suppress("CONDITION_ALWAYS_TRUE_OR_FALSE")
-        android.util.Log.e("ceshi","0闪退:${mBinding.rlLoginGoogle==null}")
-        Log.e("ceshi", "rlLoginGoogle: ${mBinding.rlLoginGoogle}")
         if (deviceModel == "2411DRN47C"){
             mBinding.rlLoginGoogle.visibility = View.GONE
         }else{
             //mBinding.rlLoginGoogle.visibility = View.VISIBLE
         }
-        // 检查 WearData 单例与 checkbox 是否为 null
-        Log.e("ceshi", "WearData: ${WearData.getInstance()}, checkbox: ${mBinding.checkbox}")
         mBinding.checkbox.isChecked = WearData.getInstance().isRememberPassWord
         mBinding.checkbox1.isChecked = WearData.getInstance().isReadAndAgreeUTsAndPAs
-        // 检查 editEmail 是否为 null
-        Log.e("ceshi", "editEmail: ${mBinding.editEmail}")
         mEmail =
             if (!TextUtils.isEmpty(WearData.getInstance().emailCode)) WearData.getInstance().emailCode else ""
         mBinding.editEmail.setText(mEmail)
-        // 检查 rlPassword 是否为 null
-        Log.e("ceshi", "rlPassword: ${mBinding.rlPassword}")
         mBinding.rlPassword.setCurrentLoginType(CommonEnum.PassWordType.EMAIL)
     }
 
@@ -195,7 +185,6 @@ class LoginEmailInputView(context: Context, attrs: AttributeSet? = null) :
 
                 if (mIsEmailEmpty && mIsFillPassWork && isCode) {
                     if (mListener != null) {
-                        android.util.Log.e("ceshi",">>>${mPassWord.trim()}")
                         val isAgree = WearData.getInstance().isReadAndAgreeUTsAndPAs
                         if (isAgree) {
                             mListener?.onLogin(

@@ -180,8 +180,8 @@ class BitmapConvertImpl : IBitmapConvert {
     private fun webViewConvert(webView: WebView, callBack: IBitmapConvertCallBack?) {
         var contBmp: Bitmap?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            @Suppress("DEPRECATION")
-            val scale = webView.scale
+            // 使用 View.scaleX 替代已弃用的 WebView.scale
+            val scale = webView.scaleX
             val width = webView.width
             val height = (webView.contentHeight * scale + 0.5).toInt()
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
@@ -189,7 +189,8 @@ class BitmapConvertImpl : IBitmapConvert {
             webView.draw(canvas)
             contBmp = bitmap
         } else {
-            //获取Picture对象
+            // TODO: capturePicture() 已弃用且在 API 26 中被移除，
+            // 当 minSdkVersion 提升至 26 时可删除此分支，统一使用 WebView.draw(Canvas) 方案
             @Suppress("DEPRECATION")
             val picture = webView.capturePicture()
             //得到图片的宽和高（没有reflect图片内容）
@@ -214,35 +215,20 @@ class BitmapConvertImpl : IBitmapConvert {
         callBack?.onResult(contBmp)
     }
 
-    @Suppress("DEPRECATION")
     private fun viewConvert(view: View, callBack: IBitmapConvertCallBack?) {
-        view.isDrawingCacheEnabled = true
-        view.buildDrawingCache()
-        if (Build.VERSION.SDK_INT >= 11) {
-            view.measure(
-                MeasureSpec.makeMeasureSpec(
-                    view.width,
-                    MeasureSpec.EXACTLY
-                ), MeasureSpec.makeMeasureSpec(
-                    view.height, MeasureSpec.EXACTLY
-                )
-            )
-            view.layout(
-                view.x.toInt(), view.y.toInt(),
-                view.x.toInt() + view.measuredWidth,
-                view.y.toInt() + view.measuredHeight
-            )
-        } else {
-            view.measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-            )
-            view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-        }
-        val b = Bitmap.createBitmap(view.drawingCache, 0, 0, view.measuredWidth, view.measuredHeight)
-
-        view.isDrawingCacheEnabled = false
-        view.destroyDrawingCache()
+        // 使用 Canvas.draw() 替代已弃用的 DrawingCache 方案（API 28 弃用）
+        view.measure(
+            MeasureSpec.makeMeasureSpec(view.width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(view.height, MeasureSpec.EXACTLY)
+        )
+        view.layout(
+            view.x.toInt(), view.y.toInt(),
+            view.x.toInt() + view.measuredWidth,
+            view.y.toInt() + view.measuredHeight
+        )
+        val b = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(b)
+        view.draw(canvas)
         callBack?.onResult(b)
     }
 }
