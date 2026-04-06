@@ -39,7 +39,7 @@ import java.util.Locale
 object Sha1Util {
 
     fun getKeyHash(context: Context): String {
-        LogUtils.i("Sha1Util", "sha1 = $sha1")
+        LogUtils.i("Sha1Util", "getKeyHash start")
         var keyHash = ""
         try {
             val info = context.packageManager.getPackageInfo(

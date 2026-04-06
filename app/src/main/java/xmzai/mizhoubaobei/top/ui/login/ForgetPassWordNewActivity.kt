@@ -419,18 +419,18 @@ class ForgetPassWordNewActivity :
         //发送手机验证码成功后，倒计时60秒，改变按钮文案，并且设置不可点击，
         countDownTimer = object : CountDownTimer(60000L, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
-                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.white))
+                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.white))
                 mBinding?.tvEmailVerifyCode?.text =
                     resources.getString(R.string.verify_code_had_send)+" ${millisUntilFinished/1000}S"  //验证码已发送
                 mBinding?.tvEmailVerifyCode?.isClickable = false
-                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.un_selected))
+                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.un_selected))
             }
 
             override fun onFinish() {
                 mBinding?.tvEmailVerifyCode?.text =
                     resources.getString(R.string.get_email_verify_code)  //获取验证码
                 mBinding?.tvEmailVerifyCode?.isClickable = true
-                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.white))
+                mBinding?.tvEmailVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.white))
             }
         }.start()
     }
@@ -439,18 +439,18 @@ class ForgetPassWordNewActivity :
         //发送手机验证码成功后，倒计时60秒，改变按钮文案，并且设置不可点击，
         countDownTimer = object : CountDownTimer(60000L, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
-                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.white))
+                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.white))
                 mBinding?.tvVerifyCode?.text =
                     resources.getString(R.string.verify_code_had_send)+" ${millisUntilFinished/1000}S"  //验证码已发送
                 mBinding?.tvVerifyCode?.isClickable = false
-                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.white))
+                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.white))
             }
 
             override fun onFinish() {
                 mBinding?.tvVerifyCode?.text =
                     resources.getString(R.string.get_email_verify_code)  //获取验证码
                 mBinding?.tvVerifyCode?.isClickable = true
-                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.white))
+                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this@ForgetPassWordNewActivity, R.color.white))
             }
         }.start()
     }
