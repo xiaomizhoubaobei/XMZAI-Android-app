@@ -29,7 +29,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    android {
     signingConfigs {
         create("release") {
             // 优先级：环境变量 > gradle.properties
@@ -95,9 +94,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
-}
 
-    buildFeatures {
         viewBinding = true
     }
 
