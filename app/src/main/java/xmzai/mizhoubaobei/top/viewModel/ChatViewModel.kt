@@ -574,11 +574,13 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                // response.result.file 已在上面检查过非null，此处直接使用
-                if (!response.result.file.url.isNullOrEmpty()){
-                    Log.e("ceshi","载入代码返回数据为：${response.result.file.url}")
-                    loadCodeResult.postValue(response.result.file.url)
-                } else {
+                if (response.result.file != null){
+                    if (!response.result.file.url.isNullOrEmpty()){
+                        Log.e("ceshi","载入代码返回数据为：${response.result.file.url}")
+                        loadCodeResult.postValue(response.result.file.url)
+                    }
+
+                }else{
                     loadCodeResult.postValue("nothing")
                 }
 
