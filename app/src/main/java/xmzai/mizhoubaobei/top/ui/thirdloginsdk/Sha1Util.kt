@@ -12,6 +12,8 @@ package xmzai.mizhoubaobei.top.ui.thirdloginsdk
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.Signature
+import android.os.Build
 import android.util.Base64
 import xmzai.mizhoubaobei.top.utils.LogUtils
 import java.io.ByteArrayInputStream
@@ -37,14 +39,20 @@ import java.util.Locale
 object Sha1Util {
 
     fun getKeyHash(context: Context): String {
-        LogUtils.i("Sha1Util", "sha1 = \$sha1")
+        LogUtils.i("Sha1Util", "sha1 = $sha1")
         var keyHash = ""
         try {
             val info = context.packageManager.getPackageInfo(
                 context.packageName,
-                PackageManager.GET_SIGNATURES
+                PackageManager.GET_SIGNING_CERTIFICATES
             )
-            for (signature in info.signatures!!) {
+            val signatures: Array<Signature>? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.signingInfo?.apkContentsSigners
+            } else {
+                @Suppress("DEPRECATION")
+                info.signatures
+            }
+            signatures?.forEach { signature ->
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 keyHash = Base64.encodeToString(md.digest(), Base64.DEFAULT)
@@ -66,11 +74,17 @@ object Sha1Util {
     fun getCertificateSHA1Fingerprint(context: Context): String {
         val pm = context.packageManager
         val pName = context.packageName
-        val flags = PackageManager.GET_SIGNATURES
+        val flags = PackageManager.GET_SIGNING_CERTIFICATES
         var pInfo: PackageInfo? = null
 
         pInfo = pm.getPackageInfo(pName, flags)
-        val cert = pInfo.signatures!![0]?.toByteArray()
+        val cert: ByteArray? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            pInfo.signingInfo?.apkContentsSigners?.get(0)?.toByteArray()
+        } else {
+            @Suppress("DEPRECATION")
+            pInfo.signatures!![0].toByteArray()
+        }
+            ?: return ""
         val input: InputStream = ByteArrayInputStream(cert)
         val cf = CertificateFactory.getInstance("X509")
         val c = cf.generateCertificate(input) as X509Certificate

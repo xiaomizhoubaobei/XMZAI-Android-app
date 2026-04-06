@@ -205,6 +205,7 @@ abstract class BaseActivity<B : ViewBinding?> : AppCompatActivity(), BaseIView {
         val configuration = res.configuration
         if (configuration.fontScale != 1.0f) {
             configuration.fontScale = 1.0f
+            @Suppress("DEPRECATION")
             res.updateConfiguration(configuration, res.displayMetrics)
         }
         return res
@@ -262,6 +263,7 @@ abstract class BaseActivity<B : ViewBinding?> : AppCompatActivity(), BaseIView {
         val configuration = resources.configuration
         val displayMetrics = resources.displayMetrics
         // 更新配置
+        @Suppress("DEPRECATION")
         resources.updateConfiguration(configuration, displayMetrics)
     }
 

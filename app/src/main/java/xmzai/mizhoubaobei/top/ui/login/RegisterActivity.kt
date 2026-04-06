@@ -10,6 +10,7 @@
 package xmzai.mizhoubaobei.top.ui.login
 
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -146,7 +147,8 @@ class RegisterActivity :
     private fun setEmailSwitch(isEmail: Boolean) {
 
         mBinding?.tvEmailRegisterName?.setTextColor(
-            if (isEmail) resources.getColor(R.color.color302AI) else resources.getColor(
+            if (isEmail) ContextCompat.getColor(this, R.color.color302AI) else ContextCompat.getColor(
+                this,
                 R.color.un_selected
             )
         )
@@ -155,7 +157,8 @@ class RegisterActivity :
             if (isEmail) View.VISIBLE else View.GONE
 
         mBinding?.tvEmailPhoneName?.setTextColor(
-            if (isEmail) resources.getColor(R.color.un_selected) else resources.getColor(
+            if (isEmail) ContextCompat.getColor(this, R.color.un_selected) else ContextCompat.getColor(
+                this,
                 R.color.color302AI
             )
         )

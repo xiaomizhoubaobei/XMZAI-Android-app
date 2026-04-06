@@ -73,7 +73,7 @@ class ModelAddActivity : BaseActivity() {
     }
 
     private fun initData(){
-        val mModelType = intent.getSerializableExtra("model_type") as? String
+        val mModelType = intent.getSerializableExtra("model_type", String::class.java)
         if (mModelType != null){
             modelType = mModelType
             curModelType = mModelType
@@ -128,7 +128,7 @@ class ModelAddActivity : BaseActivity() {
             baseUrl = ""
 
         }
-        val actionType = intent.getSerializableExtra("action_type") as? String
+        val actionType = intent.getSerializableExtra("action_type", String::class.java)
         if (actionType != null){
             if (actionType == "ADD"){
                 binding.modelTitleTv.text = getString(R.string.setting_add_model_title_message)

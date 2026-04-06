@@ -19,6 +19,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.PorterDuff
+import android.media.MediaScannerConnection
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Build
@@ -153,7 +154,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.internal.notifyAll
 import java.io.File
 import java.io.IOException
@@ -202,9 +203,11 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
     private var isR1Fusion = false
     private var isHaveTitle = false
 
-    private val PICK_IMAGE_REQUEST = 1
-    private val TAKE_PHOTO_REQUEST = 2
-    private val FILE_IMAGE_REQUEST = 3
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
+    private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
+    private lateinit var mediaProjectionLauncher: ActivityResultLauncher<Intent>
+    private lateinit var openDocumentLauncher: ActivityResultLauncher<Intent>
     private lateinit var currentPhotoPath: String
     private var isPicture = false
     private var imageUrlLocal = ""
@@ -236,9 +239,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
     private var selectedList = mutableListOf<Int>()
 
     private lateinit var screenshotManager: LongScreenshotManager
-    private val REQUEST_MEDIA_PROJECTION = 1001
-    // 用于打开文件选择器的请求码
-    private val REQUEST_CODE_OPEN_DOCUMENT = 1002
 
     private var isPrivate = false
 
@@ -337,6 +337,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         setTheme(R.style.Theme_Ai302)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // 注册 Activity Result Launchers
+        registerActivityLaunchers()
         Log.e("ceshi","onCreate")
         //setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -354,7 +356,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         chatDatabase = ChatDatabase.getInstance(this)
         dataStoreManager = DataStoreManager(MyApplication.myApplicationContext)
         // 获取震动服务
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator = getSystemService(Vibrator::class.java)
         //录音权限检测
         //checkRecordPermission(this)
         //TtsManagerUtils.initTts(this)
@@ -445,8 +447,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         ActivityManager.finishAllExcept(this)
         Log.e("ceshi","onResume")
 
-        val comeFrom = intent.getSerializableExtra("come_from") as? String
-        val setMsg = intent.getSerializableExtra("msg_setting") as? MainMessage
+        val comeFrom = intent.getSerializableExtra("come_from", String::class.java)
+        val setMsg = intent.getSerializableExtra("msg_setting", MainMessage::class.java)
         Log.e("ceshi","onResume返回信息$comeFrom")
         if (comeFrom != null){
             if (comeFrom == "setting"){
@@ -1503,10 +1505,10 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         }
         refreshChatList(false)
 
-        val chatItem = intent.getSerializableExtra("chat_item") as? ChatItemRoom
-        val position = intent.getSerializableExtra("chat_position") as? Int
-        val comeFrom = intent.getSerializableExtra("come_from") as? String
-        val chatItemHistory = intent.getSerializableExtra("setting_chat_item") as? ChatItemRoom
+        val chatItem = intent.getSerializableExtra("chat_item", ChatItemRoom::class.java)
+        val position = intent.getSerializableExtra("chat_position", Int::class.java)
+        val comeFrom = intent.getSerializableExtra("come_from", String::class.java)
+        val chatItemHistory = intent.getSerializableExtra("setting_chat_item", ChatItemRoom::class.java)
         if (position != null){
             nowChatPositon = position
         }
@@ -1650,11 +1652,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                                 lastHeight = currentHeight*/
                                 binding.chatRecyclerView.layoutManager?.scrollToPosition(messageList.size-1)
                                 // 2. 移除监听（只执行一次，或在合适时机移除）
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     binding.chatRecyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                                } else {
-                                    binding.chatRecyclerView.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                                }
                             }
                         })
 
@@ -1941,166 +1939,127 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
     }
 
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        isToPicture = true
-        //isFile = false
-        // 处理长截图权限请求结果
-        //screenshotManager.onActivityResult(requestCode, resultCode, data)
-
-        /*if (requestCode == REQUEST_MEDIA_PROJECTION) {
-            if (resultCode == RESULT_OK && data != null) {
-                // 启动前台服务处理截图
-                val serviceIntent = Intent(this, ScreenshotService::class.java).apply {
-                    putExtra(ScreenshotService.EXTRA_RESULT_CODE, resultCode)
-                    putExtra(ScreenshotService.EXTRA_RESULT_DATA, data)
+    private fun registerActivityLaunchers() {
+        // 选择图片
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                val selectedImageUri: Uri = result.data!!.data!!
+                isPicture = true
+                imageUrlLocal = "$selectedImageUri"
+                urlLocal = "$selectedImageUri"
+                lifecycleScope.launch(Dispatchers.IO) {
+                    chatViewModel.upLoadImage(this@MainActivity,
+                        SystemUtils.uriToTempFile(this@MainActivity, selectedImageUri), "imgs", false, apiService)
                 }
+                addNewImageView(imageUrlLocal, false)
+                Log.e("ceshi", "1图片地址$imageUrlLocal")
+            }
+        }
 
+        // 拍照
+        takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                currentPhotoPath?.let { path ->
+                    isPicture = true
+                    isFile = false
+                    val imageFile = File(path)
+                    if (imageFile.exists()) {
+                        val contentUri = Uri.fromFile(imageFile)
+                        imageUrlLocal = "$contentUri"
+                        urlLocal = "$contentUri"
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            chatViewModel.upLoadImage(this@MainActivity,
+                                SystemUtils.uriToTempFile(this@MainActivity, contentUri), "imgs", false, apiService)
+                        }
+                        galleryAddPic()
+                        addNewImageView(imageUrlLocal, false)
+                    } else {
+                        Log.e("Camera", "图片文件不存在: $path")
+                    }
+                } ?: run {
+                    Log.e("Camera", "未找到保存的图片路径")
+                }
+            }
+        }
+
+        // 选择文件
+        filePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            isToPicture = true
+            if (result.resultCode == RESULT_OK) {
+                isPicture = false
+                isFile = true
+                isOpenFile = false
+                result.data?.data?.let { uri ->
+                    selectedFileUri = uri
+                    urlLocal = "$uri"
+                    val cursor = contentResolver.query(uri, null, null, null, null)
+                    cursor?.use {
+                        if (it.moveToFirst()) {
+                            val fileNameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                            val fileName = it.getString(fileNameIndex) ?: "未知文件名"
+                            val fileSizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+                            val fileSize = if (!it.isNull(fileSizeIndex)) {
+                                formatFileSize(it.getFloat(fileSizeIndex))
+                            } else {
+                                "未知大小"
+                            }
+                            val fileExtension = if (fileName.contains(".")) {
+                                fileName.substring(fileName.lastIndexOf(".") + 1).uppercase()
+                            } else {
+                                "无格式"
+                            }
+                            this.fileName = fileName
+                            this.fileSize = fileSize
+                            fileNameList.add(fileName)
+                            fileSizeList.add(fileSize)
+                            Log.e("ceshi", "文件的URL：${selectedFileUri}")
+                            addNewImageView(selectedFileUri.toString(), true)
+                        }
+                    }
+                    isPicture = true
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        chatViewModel.upLoadImage(this@MainActivity,
+                            SystemUtils.uriToTempFile(this@MainActivity, selectedFileUri!!), "imgs", false, apiService)
+                    }
+                }
+            }
+        }
+
+        // 媒体投影权限
+        mediaProjectionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                val serviceIntent = Intent(this, ScreenshotService::class.java).apply {
+                    putExtra(ScreenshotService.EXTRA_RESULT_CODE, result.resultCode)
+                    putExtra(ScreenshotService.EXTRA_RESULT_DATA, result.data)
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     startForegroundService(serviceIntent)
                 } else {
                     startService(serviceIntent)
                 }
-                //screenshotManager.onActivityResult(requestCode, resultCode, data)
-            }
-        }*/
-        Log.e("ceshi","回调返回值：$requestCode,,$resultCode,,$data")
-        if (requestCode == 1002 && resultCode == 0 && data == null){
-            if (imageUrlLocalList.isNotEmpty()){
-                for (url in imageUrlLocalList){
-                    if (url.contains("documents")){
-                        showFileImageView(url,true)
-                    }
-                }
-
             }
         }
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            val selectedImageUri: Uri = data.data!!
-            isPicture = true
-            imageUrlLocal = "$selectedImageUri"
-            urlLocal = "$selectedImageUri"
-            //上传图片到服务器
-            lifecycleScope.launch(Dispatchers.IO) {
-                chatViewModel.upLoadImage(this@MainActivity,
-                    SystemUtils.uriToTempFile(this@MainActivity, selectedImageUri),"imgs",false,apiService)
-            }
 
-            addNewImageView(imageUrlLocal,false)
-
-            Log.e("ceshi","1图片地址$imageUrlLocal")
-
-        }else if(requestCode == TAKE_PHOTO_REQUEST && resultCode == RESULT_OK){
-
-            currentPhotoPath?.let { path ->
-                isPicture = true
-                isFile = false
-                //imageUrlLocal = "$path"
-                val imageFile = File(path)
-                //Log.e("ceshi","3图片地址$imageFile")
-                if (imageFile.exists()) {
-                    val contentUri = Uri.fromFile(imageFile)
-                    imageUrlLocal = "$contentUri"
-                    urlLocal = "$contentUri"
-                    //上传图片到服务器
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        chatViewModel.upLoadImage(this@MainActivity,
-                            SystemUtils.uriToTempFile(this@MainActivity, contentUri),"imgs",false,apiService)
-                    }
-
-                    galleryAddPic()
-                    //Log.e("ceshi","2图片地址$imageUrlLocal")
-                    addNewImageView(imageUrlLocal,false)
-                } else {
-                    Log.e("Camera", "图片文件不存在: $path")
+        // 打开文档
+        openDocumentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            isToPicture = true
+            if (result.resultCode == RESULT_OK) {
+                val uri = result.data?.data
+                if (uri != null) {
+                    selectedDocumentUri = uri
+                    takePersistableUriPermission(uri)
+                    openDocument(uri)
                 }
-
-
-
-
-            } ?: run {
-                Log.e("Camera", "未找到保存的图片路径")
-            }
-
-        }else if (requestCode == FILE_IMAGE_REQUEST && resultCode == RESULT_OK){
-            isPicture = false
-            isFile = true
-            isOpenFile = false
-            data?.data?.let { uri ->
-                selectedFileUri = uri
-                urlLocal = "$uri"
-                // 获取文件信息
-                val cursor = contentResolver.query(uri, null, null, null, null)
-                cursor?.use {
-                    if (it.moveToFirst()) {
-                        // 获取文件名
-                        val fileNameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                        val fileName = it.getString(fileNameIndex) ?: "未知文件名"
-
-                        // 获取文件大小（字节）
-                        val fileSizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-                        val fileSize = if (!it.isNull(fileSizeIndex)) {
-                            //it.getLong(fileSizeIndex).toString() + " bytes"
-                            //(it.getFloat(fileSizeIndex)/1024f).toString() + " kb"
-                            // 保留两位小数（四舍五入）
-                            //String.format("%.2f", it.getFloat(fileSizeIndex) / 1024f) + " kb"
-                            formatFileSize(it.getFloat(fileSizeIndex))
-                        } else {
-                            "未知大小"
+            } else if (result.resultCode == 0 && result.data == null) {
+                if (imageUrlLocalList.isNotEmpty()) {
+                    for (url in imageUrlLocalList) {
+                        if (url.contains("documents")) {
+                            showFileImageView(url, true)
                         }
-
-                        // 获取文件格式（从文件名解析）
-                        val fileExtension = if (fileName.contains(".")) {
-                            fileName.substring(fileName.lastIndexOf(".") + 1).uppercase()
-                        } else {
-                            "无格式"
-                        }
-
-                        // 显示文件信息
-                        //filePathTv.text = "文件名: $fileName\n大小: $fileSize\n格式: $fileExtension"
-                        //uploadBtn.isEnabled = true
-//                        val imageUri = DrawableToUriUtil.getDrawableUri(
-//                            context = this,
-//                            drawableResId = R.drawable.icon_file, //资源ID
-//                            displayName = "my_image" // 图片显示名称
-//                        )
-                        //mPicFileUri = imageUri
-                        this.fileName = fileName
-                        this.fileSize = fileSize
-                        fileNameList.add(fileName)
-                        fileSizeList.add(fileSize)
-                        Log.e("ceshi","文件的URL：${selectedFileUri}")
-                        addNewImageView(selectedFileUri.toString(),true)
-                        Log.e("ceshi","文件名: $fileName\\n大小: $fileSize\\n格式: $fileExtension")
                     }
                 }
-
-                //上传文件
-                isPicture = true
-                //isFile = false
-                //上传图片到服务器
-                lifecycleScope.launch(Dispatchers.IO) {
-                    chatViewModel.upLoadImage(this@MainActivity,
-                        SystemUtils.uriToTempFile(this@MainActivity, selectedFileUri!!),"imgs",false,apiService)
-                }
-            }
-        }else if (requestCode == REQUEST_CODE_OPEN_DOCUMENT && resultCode == RESULT_OK){
-            // 用户选择的文件URI
-            val uri = data?.data
-            if (uri != null) {
-                selectedDocumentUri = uri
-                // 申请持久权限（关键：确保应用重启后仍能访问该URI）
-                takePersistableUriPermission(uri)
-                // 自动打开该文件
-                openDocument(uri)
             }
         }
-        else{
-//            isPicture = false
-//            isFile = false
-        }
-
     }
     // 保存用户选择的文件URI
     private var selectedDocumentUri: Uri? = null
@@ -2109,7 +2068,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
     private fun requestMediaProjectionPermission() {
         val mediaProjectionManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val intent = mediaProjectionManager.createScreenCaptureIntent()
-        startActivityForResult(intent, REQUEST_MEDIA_PROJECTION)
+        mediaProjectionLauncher.launch(intent)
     }
 
     /**
@@ -2928,7 +2887,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             addCategory(Intent.CATEGORY_OPENABLE)
         }
         // 启动文件选择器，等待用户选择
-        startActivityForResult(intent, REQUEST_CODE_OPEN_DOCUMENT)
+        openDocumentLauncher.launch(intent)
     }
 
     /**
@@ -2997,7 +2956,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             // 点击时执行动画效果
             ViewAnimationUtils.performClickEffect(it)
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            pickImageLauncher.launch(intent)
             bottomSheetDialog.dismiss()
 
         }
@@ -3036,9 +2995,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         intent.addCategory(Intent.CATEGORY_OPENABLE)
 
         try {
-            startActivityForResult(
-                Intent.createChooser(intent, "选择文件"),
-                FILE_IMAGE_REQUEST
+            filePickerLauncher.launch(
+                Intent.createChooser(intent, "选择文件")
             )
         } catch (ex: android.content.ActivityNotFoundException) {
             Toast.makeText(this, ContextCompat.getString(this@MainActivity, R.string.install_file_mangager_toast_message), Toast.LENGTH_SHORT).show()
@@ -3223,7 +3181,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 //            // 点击时执行动画效果
 //            ViewAnimationUtils.performClickEffect(it)
 //            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+//            pickImageLauncher.launch(intent)
 //            bottomSheetDialog.dismiss()
 //
 //        }
@@ -3261,7 +3219,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, TAKE_PHOTO_REQUEST)
+                    takePhotoLauncher.launch(takePictureIntent)
                 }
             }
         }
@@ -3291,11 +3249,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
     // 将图片添加到系统图库
     private fun galleryAddPic() {
-        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-            val f = File(currentPhotoPath)
-            mediaScanIntent.data = Uri.fromFile(f)
-            sendBroadcast(mediaScanIntent)
-        }
+        MediaScannerConnection.scanFile(this, arrayOf(currentPhotoPath), null, null)
     }
 
     private fun addNewImageView(imageUrlLocal:String,mIsfile:Boolean) {
@@ -3493,7 +3447,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 //            // 点击时执行动画效果
 //            ViewAnimationUtils.performClickEffect(it)
 //            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+//            pickImageLauncher.launch(intent)
 //            bottomSheetDialog.dismiss()
 //
 //        }
@@ -3937,9 +3891,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             VoiceToTextUtils.stopRecording()
             val job = lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val requestFile = RequestBody.create(
-                        "audio/mpeg".toMediaTypeOrNull(),  // MP3文件的MIME类型
-                        File(audioFilePath)  // 待上传的文件对象
+                    val requestFile = File(audioFilePath).asRequestBody(
+                        "audio/mpeg".toMediaTypeOrNull()  // MP3文件的MIME类型
                     )
 
                     val filePart = MultipartBody.Part.createFormData(
@@ -3981,9 +3934,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             VoiceToTextUtils.stopRecording()
             val job = lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val requestFile = RequestBody.create(
-                        "audio/mpeg".toMediaTypeOrNull(),  // MP3文件的MIME类型
-                        File(audioFilePath)  // 待上传的文件对象
+                    val requestFile = File(audioFilePath).asRequestBody(
+                        "audio/mpeg".toMediaTypeOrNull()  // MP3文件的MIME类型
                     )
 
                     val filePart = MultipartBody.Part.createFormData(
@@ -4107,6 +4059,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         val configuration = resources.configuration
         val displayMetrics = resources.displayMetrics
         // 更新配置
+        @Suppress("DEPRECATION")
         resources.updateConfiguration(configuration, displayMetrics)
     }
 

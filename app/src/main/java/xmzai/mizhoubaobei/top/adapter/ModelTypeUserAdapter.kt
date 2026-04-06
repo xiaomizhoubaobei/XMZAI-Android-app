@@ -97,14 +97,14 @@ class ModelTypeUserAdapter(private val context:Context, private var chatList: Li
             }
         }
         holder.selectImage.setOnClickListener {
-            val currentPos = holder.adapterPosition // 获取实时位置
+            val currentPos = holder.bindingAdapterPosition // 获取实时位置
             holder.selectImage.visibility = View.GONE
             holder.selectedImage.visibility = View.VISIBLE
             selectedList.add(currentPos)
             listener.onDeleteClick(selectedList)
         }
         holder.selectedImage.setOnClickListener {
-            val currentPos = holder.adapterPosition // 获取实时位置
+            val currentPos = holder.bindingAdapterPosition // 获取实时位置
             holder.selectImage.visibility = View.VISIBLE
             holder.selectedImage.visibility = View.GONE
             selectedList.remove(currentPos)

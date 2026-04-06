@@ -81,7 +81,7 @@ object ScreenUtils {
         typeface: Typeface = Typeface.DEFAULT
     ): Boolean {
         val screenWidth = getScreenWidth(context)
-        val textSizePx = textSizeSp * context.resources.displayMetrics.scaledDensity
+        val textSizePx = @Suppress("DEPRECATION") textSizeSp * context.resources.displayMetrics.scaledDensity
         val textWidth = getTextWidth1(text, sp2px(context,16f), typeface)
         Log.e("ceshi","屏幕宽度：$screenWidth,,字符串宽度：$textWidth")
         return textWidth < screenWidth
@@ -92,7 +92,7 @@ object ScreenUtils {
      * 将 sp 转换为 px（Float 类型，适用于 Paint 等场景）
      */
     fun sp2px(context: Context, spValue: Float): Float {
-        return spValue * context.resources.displayMetrics.scaledDensity
+        return spValue * @Suppress("DEPRECATION") context.resources.displayMetrics.scaledDensity
     }
 
     /**

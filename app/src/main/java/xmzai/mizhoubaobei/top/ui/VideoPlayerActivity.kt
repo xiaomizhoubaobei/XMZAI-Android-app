@@ -133,7 +133,7 @@ class VideoPlayerActivity : BaseActivity() {
         }
 
         // 获取视频URI并播放
-        val videoUri = intent.getParcelableExtra<android.net.Uri>("VIDEO_URI")
+        val videoUri = intent.getParcelableExtra("VIDEO_URI", android.net.Uri::class.java)
         videoUri?.let { uri ->
             binding.videoView.setVideoURI(uri)
             mVideoUri = uri.toString()

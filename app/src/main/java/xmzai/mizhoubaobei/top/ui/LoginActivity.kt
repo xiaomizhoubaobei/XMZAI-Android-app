@@ -203,6 +203,7 @@ class LoginActivity : AppCompatActivity() {
             settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             // 启用 HTML5 缓存（如 localStorage、IndexedDB）
             settings.domStorageEnabled = true
+            @Suppress("DEPRECATION")
             settings.databaseEnabled = true
             // 1. 支持 TLS 1.0~1.3（适配低版本 Android）
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -324,6 +325,7 @@ class LoginActivity : AppCompatActivity() {
                 // 3. 初始化WebSettings（复用你原有的配置）
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
+                @Suppress("DEPRECATION")
                 settings.databaseEnabled = true
                 settings.useWideViewPort = true
                 settings.loadWithOverviewMode = true

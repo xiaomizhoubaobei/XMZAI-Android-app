@@ -10,6 +10,7 @@
 package xmzai.mizhoubaobei.top.widget.view
 
 import android.content.Context
+import androidx.core.content.ContextCompat
 import android.os.CountDownTimer
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -261,14 +262,14 @@ class RegisterEmailInputView(context: Context, attrs: AttributeSet? = null) :
                 mBinding.tvEmailVerifyCode.text =
                     resources.getString(R.string.verify_code_had_send)+" ${millisUntilFinished/1000}S"  //验证码已发送
                 mBinding.tvEmailVerifyCode.isClickable = false
-                mBinding.tvEmailVerifyCode.setTextColor(resources.getColor(R.color.un_selected))
+                mBinding.tvEmailVerifyCode.setTextColor(ContextCompat.getColor(context, R.color.un_selected))
             }
 
             override fun onFinish() {
                 mBinding.tvEmailVerifyCode.text =
                     resources.getString(R.string.get_email_verify_code)  //获取验证码
                 mBinding.tvEmailVerifyCode.isClickable = true
-                mBinding.tvEmailVerifyCode.setTextColor(resources.getColor(R.color.selected))
+                mBinding.tvEmailVerifyCode.setTextColor(ContextCompat.getColor(context, R.color.selected))
             }
         }.start()
     }

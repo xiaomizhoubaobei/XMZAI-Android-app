@@ -62,20 +62,21 @@ class DialogUtils(private val onDeleteClickListener: (String) -> Unit) {
             @SuppressLint("MissingInflatedId")
             override fun convert(holder: BaseViewHolder, item: String) {
                 holder.setText(R.id.itemTextView, item)
-                if (type == "leftHistory" && holder.position == 3){
+                val pos = holder.bindingAdapterPosition
+                if (type == "leftHistory" && pos == 3){
                     holder.setTextColor(R.id.itemTextView,Color.RED)
                 }
                 when(type){
                     "leftHistory" -> {
                         holder.getView<ImageView>(R.id.chatListToolImage).visibility = View.GONE
-                        when(holder.position){
+                        when(pos){
                             3 -> {
                                 holder.getView<View>(R.id.dialogLine).visibility = View.GONE
                             }
                         }
                     }
                     "moreLine" -> {
-                        when(holder.position){
+                        when(pos){
                             /*0 -> {
                                 holder.getView<ImageView>(R.id.chatListToolImage).setImageResource(R.drawable.icon_chat_share)
                             }
@@ -104,7 +105,7 @@ class DialogUtils(private val onDeleteClickListener: (String) -> Unit) {
                         holder.getView<ImageView>(R.id.chatListToolImage).visibility = View.VISIBLE
                     }
                     "meChatList" -> {
-                        when(holder.position){
+                        when(pos){
                             0 -> {
                                 holder.getView<ImageView>(R.id.chatListToolImage).setImageResource(R.drawable.icon_chat_me_copy)
                             }
@@ -121,7 +122,7 @@ class DialogUtils(private val onDeleteClickListener: (String) -> Unit) {
                         holder.getView<ImageView>(R.id.chatListToolImage).visibility = View.GONE
                     }
                     "imageLine" -> {
-                        when(holder.position){
+                        when(pos){
                             0 -> {
                                 holder.getView<ImageView>(R.id.chatListToolImage).setImageResource(R.drawable.icon_chat_me_copy)
                             }
@@ -139,21 +140,21 @@ class DialogUtils(private val onDeleteClickListener: (String) -> Unit) {
                     }
 
                     "settingTitleGetModelTypeList" -> {
-                        when(holder.position){
+                        when(pos){
                             1 -> {
                                 holder.getView<View>(R.id.dialogLine).visibility = View.GONE
                             }
                         }
                     }
                     "languageTypeList" -> {
-                        when(holder.position){
+                        when(pos){
                             2 -> {
                                 holder.getView<View>(R.id.dialogLine).visibility = View.GONE
                             }
                         }
                     }
                     "systemThemeList" -> {
-                        when(holder.position){
+                        when(pos){
                             2 -> {
                                 holder.getView<View>(R.id.dialogLine).visibility = View.GONE
                             }

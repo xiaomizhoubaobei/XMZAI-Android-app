@@ -51,6 +51,7 @@ class MediaAdapter(
         var mMediaItem = mediaItems[position]
 
         // 使用Glide加载缩略图
+        @Suppress("DEPRECATION")
         Glide.with(holder.itemView.context)
             .load(mediaItem.uri)
             .thumbnail(0.1f)

@@ -63,6 +63,7 @@ class MyApplication:Application() {
 
             // 缓存策略优化（预加载时提前缓存资源）
             settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            @Suppress("DEPRECATION")
             settings.databaseEnabled = true
 
             setAlpha(1.0f)

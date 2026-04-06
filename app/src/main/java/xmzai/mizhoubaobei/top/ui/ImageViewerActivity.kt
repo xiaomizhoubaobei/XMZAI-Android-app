@@ -60,7 +60,7 @@ class ImageViewerActivity : AppCompatActivity() {
 
         scaleGestureDetector = ScaleGestureDetector(this, ScaleListener())
         // 获取图片URI并显示
-        val imageUri = intent.getParcelableExtra<Uri>("IMAGE_URI")
+        val imageUri = intent.getParcelableExtra("IMAGE_URI", Uri::class.java)
         Glide.with(this)
             .load(imageUri)
             .into(binding.imageView)

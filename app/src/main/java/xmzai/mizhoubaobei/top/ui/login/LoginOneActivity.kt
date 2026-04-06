@@ -10,6 +10,7 @@
 package xmzai.mizhoubaobei.top.ui.login
 
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
@@ -244,7 +245,8 @@ class LoginOneActivity : MVPBaseActivity<ILoginView, ActivityNewLoginNewBinding,
     private fun setLoginSwitch(isEmail: Boolean) {
 
         mBinding?.tvEmailLoginName?.setTextColor(
-            if (!isEmail) resources.getColor(R.color.color302AI) else resources.getColor(
+            if (!isEmail) ContextCompat.getColor(this, R.color.color302AI) else ContextCompat.getColor(
+                this,
                 R.color.un_selected
             )
         )
@@ -252,7 +254,8 @@ class LoginOneActivity : MVPBaseActivity<ILoginView, ActivityNewLoginNewBinding,
         mBinding?.emailInput?.visibility = if (isEmail) View.VISIBLE else View.GONE
 
         mBinding?.tvEmailPhoneName?.setTextColor(
-            if (!isEmail) resources.getColor(R.color.un_selected) else resources.getColor(
+            if (!isEmail) ContextCompat.getColor(this, R.color.un_selected) else ContextCompat.getColor(
+                this,
                 R.color.color302AI
             )
         )

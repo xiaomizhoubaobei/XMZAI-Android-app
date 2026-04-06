@@ -32,7 +32,7 @@ object VoiceToTextUtils {
 
     // 开始录音
     fun startRecording(audioFilePath:String,context: Context) {
-        mediaRecorder = MediaRecorder().apply {
+        mediaRecorder = MediaRecorder(context).apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)       // 音频源：麦克风
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)  // 输出格式（支持MP3编码）
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)     // 音频编码器（AAC兼容MP3）

@@ -203,14 +203,14 @@ class HomeMessageAdapter(private val context:Context,private var chatList: List<
             }
         }
         /*holder.selectImage.setOnClickListener {
-            val currentPos = holder.adapterPosition // 获取实时位置
+            val currentPos = holder.bindingAdapterPosition // 获取实时位置
             holder.selectImage.visibility = View.GONE
             holder.selectedImage.visibility = View.VISIBLE
             selectedList.add(currentPos)
             listener.onDeleteClick(selectedList)
         }
         holder.selectedImage.setOnClickListener {
-            val currentPos = holder.adapterPosition // 获取实时位置
+            val currentPos = holder.bindingAdapterPosition // 获取实时位置
             holder.selectImage.visibility = View.VISIBLE
             holder.selectedImage.visibility = View.GONE
             selectedList.remove(currentPos)
@@ -278,14 +278,14 @@ class HomeMessageAdapter(private val context:Context,private var chatList: List<
                     }else{
                         if (holder.selectImage.visibility == View.VISIBLE){
                             isSelectDelect = true
-                            val currentPos = holder.adapterPosition // 获取实时位置
+                            val currentPos = holder.bindingAdapterPosition // 获取实时位置
                             holder.selectImage.visibility = View.GONE
                             holder.selectedImage.visibility = View.VISIBLE
                             selectedList.add(currentPos)
                             listener.onDeleteClick(selectedList)
                         }else{
                             isSelectDelect = false
-                            val currentPos = holder.adapterPosition // 获取实时位置
+                            val currentPos = holder.bindingAdapterPosition // 获取实时位置
                             holder.selectImage.visibility = View.VISIBLE
                             holder.selectedImage.visibility = View.GONE
                             selectedList.remove(currentPos)
@@ -308,7 +308,7 @@ class HomeMessageAdapter(private val context:Context,private var chatList: List<
                             listener.onItemClick(chatItem)
                         }
                     } else {
-                        val currentPos = holder.adapterPosition // 必须用adapterPosition获取实时位置
+                        val currentPos = holder.bindingAdapterPosition // 必须用adapterPosition获取实时位置
                         Log.e("ceshi","防止位置无效：$currentPos")
                         if (currentPos != RecyclerView.NO_POSITION) { // 防止位置无效
                             if (holder.selectImage.visibility == View.VISIBLE) {

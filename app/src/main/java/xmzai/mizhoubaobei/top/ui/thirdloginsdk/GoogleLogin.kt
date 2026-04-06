@@ -153,6 +153,7 @@ class GoogleLogin : IXLogin {
         if (reqCode == G_LOGIN_REQ) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
+            @Suppress("DEPRECATION")
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }

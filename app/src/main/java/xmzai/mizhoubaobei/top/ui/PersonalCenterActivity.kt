@@ -26,6 +26,8 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresExtension
 import androidx.appcompat.app.AppCompatActivity
@@ -67,8 +69,8 @@ import java.util.Locale
 class PersonalCenterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonalCenterBinding
     private val chatViewModel: ChatViewModel by viewModels()
-    private val PICK_IMAGE_REQUEST = 1
-    private val TAKE_PHOTO_REQUEST = 2
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
     private val BASE_URL = "https://api.302.ai/"
     private var CUSTOMIZE_URL_TWO = "https://api.siliconflow.cn/"
     private var apiService = NetworkFactory.createApiService(ApiService::class.java,BASE_URL)
@@ -83,6 +85,7 @@ class PersonalCenterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        registerActivityLaunchers()
         //setContentView(R.layout.activity_personal_center)
         dataStoreManager = DataStoreManager(MyApplication.myApplicationContext)
         binding = ActivityPersonalCenterBinding.inflate(layoutInflater)
@@ -148,7 +151,7 @@ class PersonalCenterActivity : AppCompatActivity() {
         binding.userImageFrame.setOnClickListener {
             // 调用相册选择器
 //            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+//            pickImageLauncher.launch(intent)
             showBottomSheetMoreDialog()
         }
 
@@ -207,82 +210,60 @@ class PersonalCenterActivity : AppCompatActivity() {
 
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            val selectedImageUri: Uri = data.data!!
-
-            Toast.makeText(this, getString(R.string.personal_upload_image_toast_message), Toast.LENGTH_SHORT).show()
-            Log.e("ceshi","设置界面返回图片${selectedImageUri}")
-
-            //上传图片到服务器
-            lifecycleScope.launch(Dispatchers.IO) {
-
-                dataStoreManager.saveImageUrl(selectedImageUri.toString())
-                lifecycleScope.launch(Dispatchers.Main) {
-                    // 方法1：使用内置的CircleCrop变换
-                    Glide.with(this@PersonalCenterActivity)
-                        .load(selectedImageUri.toString())
-                        .apply(RequestOptions.circleCropTransform())
-                        .placeholder(android.R.drawable.ic_menu_gallery)
-                        .error(android.R.drawable.stat_notify_error)
-                        .into(binding.personalImage)
-                }
-
-
-                chatViewModel.upLoadImageUser(
-                    this@PersonalCenterActivity,
-                    SystemUtils.uriToTempFile(this@PersonalCenterActivity, selectedImageUri), "imgs", false,apiService,
-                    WearData.getInstance().token
-                )
-
-            }
-
-
-        }else if(requestCode == TAKE_PHOTO_REQUEST && resultCode == RESULT_OK){
-
-            currentPhotoPath?.let { path ->
-                val imageFile = File(path)
-                //Log.e("ceshi","3图片地址$imageFile")
-                if (imageFile.exists()) {
-                    val contentUri = Uri.fromFile(imageFile)
-                    Toast.makeText(this, getString(R.string.personal_upload_image_toast_message), Toast.LENGTH_SHORT).show()
-                    //上传图片到服务器
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        dataStoreManager.saveImageUrl(contentUri.toString())
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            // 方法1：使用内置的CircleCrop变换
-                            Glide.with(this@PersonalCenterActivity)
-                                .load(contentUri.toString())
-                                .apply(RequestOptions.circleCropTransform())
-                                .placeholder(android.R.drawable.ic_menu_gallery)
-                                .error(android.R.drawable.stat_notify_error)
-                                .into(binding.personalImage)
-                        }
-
-
-                        chatViewModel.upLoadImageUser(this@PersonalCenterActivity,
-                            SystemUtils.uriToTempFile(this@PersonalCenterActivity, contentUri),"imgs",false,apiService,
-                            WearData.getInstance().token)
+    private fun registerActivityLaunchers() {
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                val selectedImageUri: Uri = result.data!!.data!!
+                Toast.makeText(this, getString(R.string.personal_upload_image_toast_message), Toast.LENGTH_SHORT).show()
+                Log.e("ceshi","设置界面返回图片${selectedImageUri}")
+                lifecycleScope.launch(Dispatchers.IO) {
+                    dataStoreManager.saveImageUrl(selectedImageUri.toString())
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Glide.with(this@PersonalCenterActivity)
+                            .load(selectedImageUri.toString())
+                            .apply(RequestOptions.circleCropTransform())
+                            .placeholder(android.R.drawable.ic_menu_gallery)
+                            .error(android.R.drawable.stat_notify_error)
+                            .into(binding.personalImage)
                     }
-
-                    galleryAddPic()
-                    //Log.e("ceshi","2图片地址$imageUrlLocal")
-
-                } else {
-                    Log.e("Camera", "图片文件不存在: $path")
+                    chatViewModel.upLoadImageUser(
+                        this@PersonalCenterActivity,
+                        SystemUtils.uriToTempFile(this@PersonalCenterActivity, selectedImageUri), "imgs", false, apiService,
+                        WearData.getInstance().token
+                    )
                 }
-
-
-
-
-            } ?: run {
-                Log.e("Camera", "未找到保存的图片路径")
             }
-
         }
-
-
+        takePhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                currentPhotoPath?.let { path ->
+                    val imageFile = File(path)
+                    if (imageFile.exists()) {
+                        val contentUri = Uri.fromFile(imageFile)
+                        Toast.makeText(this, getString(R.string.personal_upload_image_toast_message), Toast.LENGTH_SHORT).show()
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            dataStoreManager.saveImageUrl(contentUri.toString())
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                Glide.with(this@PersonalCenterActivity)
+                                    .load(contentUri.toString())
+                                    .apply(RequestOptions.circleCropTransform())
+                                    .placeholder(android.R.drawable.ic_menu_gallery)
+                                    .error(android.R.drawable.stat_notify_error)
+                                    .into(binding.personalImage)
+                            }
+                            chatViewModel.upLoadImageUser(this@PersonalCenterActivity,
+                                SystemUtils.uriToTempFile(this@PersonalCenterActivity, contentUri), "imgs", false, apiService,
+                                WearData.getInstance().token)
+                        }
+                        galleryAddPic()
+                    } else {
+                        Log.e("Camera", "图片文件不存在: $path")
+                    }
+                } ?: run {
+                    Log.e("Camera", "未找到保存的图片路径")
+                }
+            }
+        }
     }
 
     @SuppressLint("MissingInflatedId")
@@ -320,7 +301,7 @@ class PersonalCenterActivity : AppCompatActivity() {
             // 点击时执行动画效果
             ViewAnimationUtils.performClickEffect(it)
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            pickImageLauncher.launch(intent)
             bottomSheetDialog.dismiss()
 
         }
@@ -373,7 +354,7 @@ class PersonalCenterActivity : AppCompatActivity() {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, TAKE_PHOTO_REQUEST)
+                    takePhotoLauncher.launch(takePictureIntent)
                 }
             }
         }
@@ -419,7 +400,7 @@ class PersonalCenterActivity : AppCompatActivity() {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, TAKE_PHOTO_REQUEST)
+                    takePhotoLauncher.launch(takePictureIntent)
                 }
             } ?: run {
                 // 如果没有找到可以处理相机意图的应用
@@ -447,11 +428,13 @@ class PersonalCenterActivity : AppCompatActivity() {
 
     // 将图片添加到系统图库
     private fun galleryAddPic() {
-        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-            val f = File(currentPhotoPath)
-            mediaScanIntent.data = Uri.fromFile(f)
-            sendBroadcast(mediaScanIntent)
-        }
+        val f = File(currentPhotoPath)
+        android.media.MediaScannerConnection.scanFile(
+            this,
+            arrayOf(f.absolutePath),
+            null,
+            null
+        )
     }
 
     // 根据当前环境动态生成 authority

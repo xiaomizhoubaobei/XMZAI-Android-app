@@ -13,6 +13,7 @@ import android.os.CountDownTimer
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import xmzai.mizhoubaobei.top.R
 import xmzai.mizhoubaobei.top.base.mvp.MVPBaseActivity
@@ -190,14 +191,14 @@ class ForgetPassWordPhoneActivity :
                 mBinding?.tvVerifyCode?.text =
                     resources.getString(R.string.verify_code_had_send)+" ${millisUntilFinished/1000}S"  //验证码已发送
                 mBinding?.tvVerifyCode?.isClickable = false
-                mBinding?.tvVerifyCode?.setTextColor(resources.getColor(R.color.un_selected))
+                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.un_selected))
             }
 
             override fun onFinish() {
                 mBinding?.tvVerifyCode?.text =
                     resources.getString(R.string.get_verify_code)  //获取验证码
                 mBinding?.tvVerifyCode?.isClickable = true
-                mBinding?.tvVerifyCode?.setTextColor(resources.getColor(R.color.selected))
+                mBinding?.tvVerifyCode?.setTextColor(ContextCompat.getColor(this, R.color.selected))
             }
         }.start()
     }

@@ -79,6 +79,7 @@ open class BaseActivity: AppCompatActivity() {
         val configuration = resources.configuration
         val displayMetrics = resources.displayMetrics
         // 更新配置
+        @Suppress("DEPRECATION")
         resources.updateConfiguration(configuration, displayMetrics)
     }
 //    private fun applyLanguage() {

@@ -12,6 +12,7 @@ package xmzai.mizhoubaobei.top.utils
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -132,21 +133,6 @@ object ScreenshotSaver {
      * 通知系统相册刷新，确保图片立即显示
      */
     private fun refreshGallery(context: Context, imagePath: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 发送广播通知相册更新
-            val mediaScanIntent = android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            val file = File(imagePath)
-            val uri = android.net.Uri.fromFile(file)
-            mediaScanIntent.data = uri
-            context.sendBroadcast(mediaScanIntent)
-        } else {
-            // 低版本直接扫描整个目录
-            context.sendBroadcast(
-                android.content.Intent(
-                    android.content.Intent.ACTION_MEDIA_MOUNTED,
-                    android.net.Uri.fromFile(Environment.getExternalStorageDirectory())
-                )
-            )
-        }
+        MediaScannerConnection.scanFile(context, arrayOf(imagePath), null, null)
     }
 }

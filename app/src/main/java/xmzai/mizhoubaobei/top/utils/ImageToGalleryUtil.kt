@@ -14,6 +14,7 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -116,24 +117,8 @@ object ImageToGalleryUtil {
                 }
             } ?: throw IOException("无法打开相册文件写入流")
 
-            // 7. 通知相册刷新（部分机型需手动触发，确保图片立即显示）
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                val mediaScanIntent = android.content.Intent(
-                    android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                    insertUri
-                )
-                context.sendBroadcast(mediaScanIntent)
-            } else {
-                // Android 4.4以下：扫描整个目录
-                context.sendBroadcast(
-                    android.content.Intent(
-                        android.content.Intent.ACTION_MEDIA_MOUNTED,
-                        android.net.Uri.fromFile(
-                            File(Environment.getExternalStorageDirectory(), GALLERY_DIR)
-                        )
-                    )
-                )
-            }
+            // 7. 通知相册刷新（使用 MediaScannerConnection.scanFile）
+            MediaScannerConnection.scanFile(context, arrayOf(insertUri.toString()), null, null)
 
             // 返回相册图片的ContentUri字符串（如 content://media/external/images/media/12345）
             return@withContext insertUri.toString()

@@ -212,7 +212,7 @@ class BitmapConvertImpl : IBitmapConvert {
         callBack?.onResult(contBmp)
     }
 
-    @SuppressLint("ObsoleteSdkInt")
+    @Suppress("DEPRECATION")
     private fun viewConvert(view: View, callBack: IBitmapConvertCallBack?) {
         view.isDrawingCacheEnabled = true
         view.buildDrawingCache()

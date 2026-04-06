@@ -123,6 +123,8 @@ class SettingActivity : BaseActivity() {
     var mLanguage = ""
     private var readImageUrl = ""
 
+    @Suppress("DEPRECATION")
+
     // 初始化表情列表
     val emojis = listOf(
         "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
@@ -156,7 +158,7 @@ class SettingActivity : BaseActivity() {
         setContentView(binding.root)
         chatDatabase = ChatDatabase.getInstance(this)
         dataStoreManager = DataStoreManager(MyApplication.myApplicationContext)
-        val newChat = intent.getSerializableExtra("chat_new") as? Boolean
+        val newChat = intent.getSerializableExtra("chat_new", Boolean::class.java)
         if (newChat != null){
            isNewChat = newChat
         }
@@ -615,6 +617,7 @@ class SettingActivity : BaseActivity() {
             settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             // 启用 HTML5 缓存（如 localStorage、IndexedDB）
             settings.domStorageEnabled = true
+            @Suppress("DEPRECATION")
             settings.databaseEnabled = true
             // 1. 支持 TLS 1.0~1.3（适配低版本 Android）
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

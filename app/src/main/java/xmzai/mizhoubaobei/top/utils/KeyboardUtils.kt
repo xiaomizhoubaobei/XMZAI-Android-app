@@ -67,11 +67,7 @@ class KeyboardUtils(private val activity: Activity) {
     fun unregisterKeyboardListener() {
         val rootView = activity.window.decorView.rootView
         globalLayoutListener?.let {
-            if (ViewTreeObserver::class.java.isAssignableFrom(rootView.viewTreeObserver.javaClass)) {
-                rootView.viewTreeObserver.removeOnGlobalLayoutListener(it)
-            } else {
-                rootView.viewTreeObserver.removeGlobalOnLayoutListener(it)
-            }
+            rootView.viewTreeObserver.removeOnGlobalLayoutListener(it)
             globalLayoutListener = null
         }
     }
