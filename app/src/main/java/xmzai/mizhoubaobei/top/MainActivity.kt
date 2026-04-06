@@ -95,7 +95,6 @@ import xmzai.mizhoubaobei.top.screenshot.ScreenShotTools
 import xmzai.mizhoubaobei.top.screenshot.model.ScreenBitmap
 import xmzai.mizhoubaobei.top.screenshot.model.i.IScreenShotCallBack
 import xmzai.mizhoubaobei.top.service.ScreenshotService
-import xmzai.mizhoubaobei.top.ui.LoginActivity
 import xmzai.mizhoubaobei.top.ui.ResourceActivity
 import xmzai.mizhoubaobei.top.ui.SettingActivity
 import xmzai.mizhoubaobei.top.ui.ShowScreenImageActivity
@@ -130,7 +129,6 @@ import xmzai.mizhoubaobei.top.datastore.ImageUrlMapper
 import xmzai.mizhoubaobei.top.room.ChatRepository
 import xmzai.mizhoubaobei.top.room.UserConfigurationRoom
 import xmzai.mizhoubaobei.top.screenshot.model.config.PermissionConst
-import xmzai.mizhoubaobei.top.ui.login.LoginOneActivity
 import xmzai.mizhoubaobei.top.utils.ActivityManager
 import xmzai.mizhoubaobei.top.utils.DeviceDetector
 import xmzai.mizhoubaobei.top.utils.ImageToGalleryUtil
@@ -3645,8 +3643,7 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
 
     private fun toLogin(){
-        val intent = Intent(this, LoginOneActivity::class.java)
-        startActivity(intent)
+        // 302用户管理系统已移除，登录功能不再可用
     }
 
     private fun showRenameDialog(position: Int,oldName:String) {

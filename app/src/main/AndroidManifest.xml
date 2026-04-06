@@ -29,19 +29,7 @@
         android:theme="@style/SplashTheme"
         tools:targetApi="31">
         <activity
-            android:name=".ui.login.ForgetPassWordNewActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.VersionUpdateActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.ChangePasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.PersonalCenterActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -106,10 +94,7 @@
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
-        <activity
-            android:name=".ui.LoginActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" /> <!-- FileProvider 配置 -->
+        <!-- FileProvider 配置 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="xmzai.mizhoubaobei.top.fileprovider"
@@ -169,25 +154,6 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.LoginOneActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.RegisterActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.ForgetPassWordEmailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.ForgetPassWordPhoneActivity"
-            android:exported="false"
             android:screenOrientation="portrait" />
     </application>
 

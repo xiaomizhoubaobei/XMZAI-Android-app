@@ -75,9 +75,6 @@ class ChatViewModel :ViewModel(){
     //val apiService = NetworkFactory.createApiService(ApiService::class.java)
     val userInfoResult = MutableLiveData<UserInfo>()
 
-    val deleteUserResult = MutableLiveData<String?>()
-    val changeUserNameResult = MutableLiveData<String?>()
-    val changeUserPswResult = MutableLiveData<String?>()
     val loadCodeResult = MutableLiveData<String?>()
 
     // 关键：当前最新的请求标识（每次发新请求时更新，用于过滤旧请求结果）
@@ -410,105 +407,6 @@ class ChatViewModel :ViewModel(){
                 // 在主线程更新 UI
               Log.e("ceshi","返回用户数据为：${response.data.api_key}")
                 userInfoResult.postValue(response.data)
-            }
-        } catch (e: HttpException) {
-            // 处理 HTTP 错误
-        } catch (e: IOException) {
-            // 处理网络错误
-        } catch (e: retrofit2.HttpException){
-            Log.e("ceshi","错误：${e.toString()}")
-            //modelListResult.postValue(modelListNull)
-        } catch (e: IllegalArgumentException) {
-            // 处理异常
-            Log.e("Network", "无效的 Authorization 头: ${e.message}")
-
-            // 可选：提供默认值或执行恢复逻辑
-        }
-
-    }
-
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun deleteUser(token:String,apiService:ApiService){
-        Log.e("ceshi","获取到的token：$token")
-        val authorizationToken = "Bearer $token"//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Basic MTQ1MzE2NzI4N0BxcS5jb206cDhaU21HS1g6Umc="//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Bearer sk-4ogGTjSn67pc9RREx3wOxpquTnF1vIKJN6nRVk4z8jteyfkd"
-        try {
-            val response = apiService.deleteUser(
-                authorization = authorizationToken
-            )
-            // 处理返回的响应数据
-            viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-                Log.e("ceshi","删除用户返回数据为：${response.msg}")
-                deleteUserResult.postValue(response.msg)
-            }
-        } catch (e: HttpException) {
-            // 处理 HTTP 错误
-        } catch (e: IOException) {
-            // 处理网络错误
-        } catch (e: retrofit2.HttpException){
-            Log.e("ceshi","错误：${e.toString()}")
-            //modelListResult.postValue(modelListNull)
-        } catch (e: IllegalArgumentException) {
-            // 处理异常
-            Log.e("Network", "无效的 Authorization 头: ${e.message}")
-
-            // 可选：提供默认值或执行恢复逻辑
-        }
-
-    }
-
-
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun changeUserName(token:String,apiService:ApiService,name:String){
-        Log.e("ceshi","获取到的token：$token")
-        val authorizationToken = "Bearer $token"//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Basic MTQ1MzE2NzI4N0BxcS5jb206cDhaU21HS1g6Umc="//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Bearer sk-4ogGTjSn67pc9RREx3wOxpquTnF1vIKJN6nRVk4z8jteyfkd"
-        try {
-            val request = ApiService.UpdateUserNameRequest(name = name)
-            val response = apiService.changeUserName(
-                authorization = authorizationToken, request = request
-            )
-            // 处理返回的响应数据
-            viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-                Log.e("ceshi","修改用户名字返回数据为：${response.msg}")
-                changeUserNameResult.postValue(response.msg)
-            }
-        } catch (e: HttpException) {
-            // 处理 HTTP 错误
-        } catch (e: IOException) {
-            // 处理网络错误
-        } catch (e: retrofit2.HttpException){
-            Log.e("ceshi","错误：${e.toString()}")
-            //modelListResult.postValue(modelListNull)
-        } catch (e: IllegalArgumentException) {
-            // 处理异常
-            Log.e("Network", "无效的 Authorization 头: ${e.message}")
-
-            // 可选：提供默认值或执行恢复逻辑
-        }
-
-    }
-
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun changeUserPassword(token:String,apiService:ApiService,oldPsw:String,newPsw:String){
-        Log.e("ceshi","获取到的token：$token")
-        val authorizationToken = "Bearer $token"//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Basic MTQ1MzE2NzI4N0BxcS5jb206cDhaU21HS1g6Umc="//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken = "Bearer sk-4ogGTjSn67pc9RREx3wOxpquTnF1vIKJN6nRVk4z8jteyfkd"
-        try {
-            val request = ApiService.UpdateUserPasswordRequest(origin_password = oldPsw,change_password = newPsw)
-            val response = apiService.changeUserPassWord(
-                authorization = authorizationToken, request = request
-            )
-            // 处理返回的响应数据
-            viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI
-                Log.e("ceshi","修改用户密码返回数据为：${response.msg}")
-                changeUserPswResult.postValue(response.msg)
             }
         } catch (e: HttpException) {
             // 处理 HTTP 错误

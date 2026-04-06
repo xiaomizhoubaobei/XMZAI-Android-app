@@ -439,8 +439,7 @@ class SettingActivity : BaseActivity() {
         }
 
         binding.cons0.setOnClickListener {
-            val intent = Intent(this, PersonalCenterActivity::class.java)
-            startActivity(intent)
+            // 302用户管理系统已移除，个人中心入口已关闭
         }
 
         binding.clearChatConst.setOnClickListener {

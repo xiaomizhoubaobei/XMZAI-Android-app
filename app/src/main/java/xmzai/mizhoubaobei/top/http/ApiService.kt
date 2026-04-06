@@ -76,39 +76,6 @@ interface ApiService {
         @Header("Content-Type") contentType: String = "application/json"
     ) : UserInfoResponse
 
-    @DELETE("https://dash-api.302.ai/user/delete")
-    suspend fun deleteUser(
-        @Header("Accept") accept: String = "application/json",
-        @Header("Authorization") authorization: String,
-        @Header("Content-Type") contentType: String = "application/json"
-    ) : UserInfoResponse
-
-    @PUT("https://dash-api.302.ai/user/name")
-    suspend fun changeUserName(
-        @Header("Accept") accept: String = "application/json",
-        @Header("Authorization") authorization: String,
-        @Header("Content-Type") contentType: String = "application/json",
-        @Body request: UpdateUserNameRequest
-    ) : UserInfoResponse
-
-
-
-    data class UpdateUserNameRequest(
-        val name: String
-    )
-
-    @PUT("https://dash-api.302.ai/user/pw")
-    suspend fun changeUserPassWord(
-        @Header("Accept") accept: String = "application/json",
-        @Header("Authorization") authorization: String,
-        @Header("Content-Type") contentType: String = "application/json",
-        @Body request: UpdateUserPasswordRequest
-    ) : UserInfoResponse
-
-    data class UpdateUserPasswordRequest(
-        val origin_password: String,
-        val change_password: String
-    )
 
 
 
@@ -128,14 +95,6 @@ interface ApiService {
         @Part("need_compress") needCompress: Boolean
     ): UploadImageResponse // 返回类型为UploadResponse
 
-    @Multipart
-    @PUT("https://dash-api.302.ai/user/avatar/update") // 硬编码接口路径 //https://dash-api.302.ai/gpt/api/upload/gpt/image//https://test-api2.proxy302.com/gpt/api/upload/gpts/image
-    suspend fun uploadImageUser(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("need_compress") needCompress: Boolean
-    ): UploadImageResponseUser // 返回类型为UploadResponse
-
     @POST("/302/sandbox/direct_run_code")
     suspend fun loadCode(
         @Header("Accept") accept: String = "application/json",
@@ -149,6 +108,13 @@ interface ApiService {
         val is_download: Boolean
     )
 
+    @Multipart
+    @PUT("https://dash-api.302.ai/user/avatar/update")
+    suspend fun uploadImageUser(
+        @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part,
+        @Part("need_compress") needCompress: Boolean
+    ): UploadImageResponseUser
 
 
 }
@@ -394,15 +360,15 @@ data class UploadImageResponse(
     val data: UploadData?
 )
 
+data class UploadData(
+    val url: String,
+    val encoding: String
+)
+
 data class UploadImageResponseUser(
     val code: Int,
     val msg: String,
     val data: UploadDataUser?
-)
-
-data class UploadData(
-    val url: String,
-    val encoding: String
 )
 
 data class UploadDataUser(

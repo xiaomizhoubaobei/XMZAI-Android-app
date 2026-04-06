@@ -40,26 +40,13 @@ class SplashActivity: BaseActivity() {
 
 
     private fun initView() {
-        //判断是否已经登录
-        if (WearData.getInstance().isLogin) {//WearData.getInstance().isLogin
-            Log.e("ceshi","ceshi 是否有就登录了==========")
-            navMain()
-        } else {
-            navLogin()
-            Log.e("ceshi","ceshi 是否有就登录了====没有登录======")
-        }
+        // 直接跳转到主页
+        navMain()
     }
 
     //去主页
     private fun navMain() {
         ProxyActivityNavUtil.navMain(this@SplashActivity)
         ThreadUtils.runOnUiThreadDelayed({ finish() }, 1000)
-    }
-
-    //去登录
-    private fun navLogin() {
-        ProxyActivityNavUtil.navLogin(this@SplashActivity)
-
-        ThreadUtils.runOnUiThreadDelayed({ finish() }, 2000)
     }
 }

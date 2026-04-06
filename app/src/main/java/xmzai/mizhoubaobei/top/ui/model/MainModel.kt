@@ -16,7 +16,6 @@ import xmzai.mizhoubaobei.top.bean.ProxyApkBean
 import xmzai.mizhoubaobei.top.bean.ProxySecretBean
 import xmzai.mizhoubaobei.top.network.NetConfig
 import xmzai.mizhoubaobei.top.network.NetworkUtil
-import xmzai.mizhoubaobei.top.network.common_bean.callback.LoginCallback
 import xmzai.mizhoubaobei.top.network.common_bean.bean.BaseResponse
 import xmzai.mizhoubaobei.top.network.common_bean.callback.RequestCallback
 import xmzai.mizhoubaobei.top.network.common_bean.callback.ResponseCallback
