@@ -44,7 +44,7 @@ android {
                 val envKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
                 val envKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
 
-                storeFile = file(envStoreFile ?: (project.findProperty("RELEASE_STORE_FILE") as String?) ?: "keystore/release.keystore")
+                storeFile = rootProject.file(envStoreFile ?: (project.findProperty("RELEASE_STORE_FILE") as String?) ?: "keystore/release.keystore")
                 storePassword = envStorePassword ?: project.findProperty("RELEASE_STORE_PASSWORD") as String
                 keyAlias = envKeyAlias ?: project.findProperty("RELEASE_KEY_ALIAS") as String
                 keyPassword = envKeyPassword ?: project.findProperty("RELEASE_KEY_PASSWORD") as String
