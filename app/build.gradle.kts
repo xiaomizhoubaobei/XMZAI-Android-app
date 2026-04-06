@@ -35,10 +35,10 @@ android {
             // 优先级：环境变量 > gradle.properties
             // 这样支持 CI/CD 自动化构建和本地开发两种场景
             
-            val envStoreFile = System.getenv("KEYSTORE_FILE")
-            val envStorePassword = System.getenv("KEYSTORE_PASSWORD")
-            val envKeyAlias = System.getenv("KEY_ALIAS")
-            val envKeyPassword = System.getenv("KEY_PASSWORD")
+            val envStoreFile = System.getenv("RELEASE_STORE_FILE")
+            val envStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
+            val envKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
+            val envKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
             
             val propStoreFile = project.findProperty("RELEASE_STORE_FILE") as String?
             val propStorePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String?
@@ -53,16 +53,16 @@ android {
             
             // 验证必要参数
             if (finalStoreFile == null) {
-                error("签名配置错误：未找到密钥库文件路径。请设置环境变量 KEYSTORE_FILE 或在 gradle.properties 中设置 RELEASE_STORE_FILE")
+                error("签名配置错误：未找到密钥库文件路径。请设置环境变量 RELEASE_STORE_FILE 或在 gradle.properties 中设置 RELEASE_STORE_FILE")
             }
             if (finalStorePassword == null) {
-                error("签名配置错误：未找到密钥库密码。请设置环境变量 KEYSTORE_PASSWORD 或在 gradle.properties 中设置 RELEASE_STORE_PASSWORD")
+                error("签名配置错误：未找到密钥库密码。请设置环境变量 RELEASE_STORE_PASSWORD 或在 gradle.properties 中设置 RELEASE_STORE_PASSWORD")
             }
             if (finalKeyAlias == null) {
-                error("签名配置错误：未找到密钥别名。请设置环境变量 KEY_ALIAS 或在 gradle.properties 中设置 RELEASE_KEY_ALIAS")
+                error("签名配置错误：未找到密钥别名。请设置环境变量 RELEASE_KEY_ALIAS 或在 gradle.properties 中设置 RELEASE_KEY_ALIAS")
             }
             if (finalKeyPassword == null) {
-                error("签名配置错误：未找到密钥密码。请设置环境变量 KEY_PASSWORD 或在 gradle.properties 中设置 RELEASE_KEY_PASSWORD")
+                error("签名配置错误：未找到密钥密码。请设置环境变量 RELEASE_KEY_PASSWORD 或在 gradle.properties 中设置 RELEASE_KEY_PASSWORD")
             }
             
             // 应用配置
