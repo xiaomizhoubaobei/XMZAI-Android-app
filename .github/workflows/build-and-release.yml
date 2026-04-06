@@ -97,18 +97,17 @@ jobs:
 
         echo "changelog_generated=true" >> $GITHUB_OUTPUT
 
-    - name: Create Release
-      id: create_release
+    - name: Rename APK
+      run: |
+        mv app/build/outputs/apk/release/app-release.apk \
+          app/build/outputs/apk/release/XMZAI-v${{ steps.version.outputs.version_name }}.apk
+
+    - name: Create Release and Upload APK
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ steps.version.outputs.version_name }}
         name: Release v${{ steps.version.outputs.version_name }}
         body_path: release_notes.md
+        files: app/build/outputs/apk/release/XMZAI-v${{ steps.version.outputs.version_name }}.apk
         draft: false
         prerelease: false
-
-    - name: Upload Release APK
-      uses: softprops/action-gh-release@v2
-      with:
-        files: app/build/outputs/apk/release/app-release.apk
-        asset_name: XMZAI-v${{ steps.version.outputs.version_name }}.apk
