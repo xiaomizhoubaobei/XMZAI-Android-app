@@ -532,7 +532,7 @@ object StringObjectUtils {
         // 循环查找所有匹配的URL
         while (matcher.find()) {
             // group(1)获取第一个捕获组的内容（即src属性中的URL）
-            val url = matcher.group(1)
+            val url = matcher.group(1) ?: ""
             urls.add(url)
         }
         return urls
@@ -553,7 +553,7 @@ object StringObjectUtils {
         val urls = mutableListOf<String>()
         while (matcher.find()) {
             // group(2) 是捕获到的URL（content://... 或 file://...）
-            val url = matcher.group(2)
+            val url = matcher.group(2) ?: ""
             urls.add(url)
         }
 
@@ -567,7 +567,7 @@ object StringObjectUtils {
         // 循环查找所有匹配的URL
         while (matcher1.find()) {
             // group(1)获取第一个捕获组的内容（即src属性中的URL）
-            val url = matcher1.group(1)
+            val url = matcher1.group(1) ?: ""
             if (!urls.contains(url)){
                 urls.add(url)
             }

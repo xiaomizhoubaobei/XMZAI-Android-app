@@ -196,7 +196,7 @@ class LoginEmailInputView(context: Context, attrs: AttributeSet? = null) :
                     if (mListener != null) {
                         android.util.Log.e("ceshi",">>>${mPassWord.trim()}")
                         val isAgree = WearData.getInstance().isReadAndAgreeUTsAndPAs
-                        if (true) {
+                        if (isAgree) {
                             mListener?.onLogin(
                                 mEmail.trim(),
                                 mPassWord.trim(),
@@ -238,7 +238,7 @@ class LoginEmailInputView(context: Context, attrs: AttributeSet? = null) :
             override fun onIClick(v: View?) {
                 if (mListener != null) {
                     val isAgree = WearData.getInstance().isReadAndAgreeUTsAndPAs
-                    if (true) {
+                    if (isAgree) {
                         mListener?.onGoogleLogin()
                     }else {
                         ToastUtils.showShort(R.string.no_agree_error)

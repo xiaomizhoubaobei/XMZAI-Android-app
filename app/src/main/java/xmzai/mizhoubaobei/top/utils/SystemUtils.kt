@@ -94,7 +94,7 @@ object SystemUtils {
                 }
             }
         } else if (uri.scheme == "file") {
-            result = File(uri.path).name
+            result = File(uri.path ?: "unknown_file").name
         }
         return result
     }

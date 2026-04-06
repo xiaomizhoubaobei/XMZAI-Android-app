@@ -105,6 +105,11 @@ object TimeUtils {
             val date = sdf.parse(time)
             val date1 = sdf.parse(nowTime)
 
+            // 如果日期解析失败，返回默认值
+            if (date == null || date1 == null) {
+                return "未知"
+            }
+
             val calendar = Calendar.getInstance()
             val calendar1 = Calendar.getInstance()
 

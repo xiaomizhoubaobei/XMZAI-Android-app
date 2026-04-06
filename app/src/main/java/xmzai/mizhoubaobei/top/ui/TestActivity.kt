@@ -128,12 +128,14 @@ class TestActivity : AppCompatActivity() {
                         .error(android.R.drawable.stat_notify_error) // 加载失败占位图
 
                     // 加载本地文件到ImageView
-                    Glide.with(this@TestActivity)
-                        .load(File(localUrl)) // 传入本地文件
-                        .apply(options)
-                        .into(binding.showImage)
+                    localUrl?.let { url ->
+                        Glide.with(this@TestActivity)
+                            .load(File(url)) // 传入本地文件
+                            .apply(options)
+                            .into(binding.showImage)
 
-                    saveToGalleryAction(localUrl!!,this@TestActivity, lifecycleScope)
+                        saveToGalleryAction(url, this@TestActivity, lifecycleScope)
+                    }
                 }
 
             } catch (e: Exception) {

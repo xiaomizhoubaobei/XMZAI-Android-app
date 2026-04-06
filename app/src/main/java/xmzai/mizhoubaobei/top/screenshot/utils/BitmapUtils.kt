@@ -119,8 +119,8 @@ fun savingBitmapIntoFile(context: Context?, bitmap: Bitmap?, callBack: IScreenSh
          * 分级压缩
          * 输出文件
          */
-        if (bitmap != null) {
-            try {
+        // bitmap 已在函数入口处进行null检查（第76行），此处无需重复检查
+        try {
                 if (!file.exists()) {
                     file.createNewFile()
                 }
@@ -288,9 +288,15 @@ fun savingBitmapIntoFile(context: Context?, bitmap: Bitmap?, callBack: IScreenSh
                 callBack?.onResult(screenBitmap)
             }
 
-        } else {
+        } catch (e: Exception) {
+            e.printStackTrace()
             dialog.dismiss()
-            callBack?.onResult(null)
+            val screenBitmap = ScreenBitmap()
+            screenBitmap.apply {
+                this.bitmap = bitmap
+                this.filePath = fileReturnPath
+            }
+            callBack?.onResult(screenBitmap)
         }
     })
     thread.start()

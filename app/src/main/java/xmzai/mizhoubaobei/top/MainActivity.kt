@@ -2407,11 +2407,8 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
             //chatListReversed = chatList.reversed().toMutableList()
             chatListReversed = chatList.sortedByDescending { it.time }.toMutableList()
 
-            if (chatListReversed != null){
-                chatId = chatListReversed.size
-            }else{
-                chatId = 0
-            }
+            // chatListReversed 已初始化为非空列表，无需null检查
+            chatId = chatListReversed.size
         }
 
 

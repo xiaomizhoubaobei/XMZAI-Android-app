@@ -574,13 +574,11 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                if (response.result.file != null){
-                    if (!response.result.file.url.isNullOrEmpty()){
-                        Log.e("ceshi","载入代码返回数据为：${response.result.file.url}")
-                        loadCodeResult.postValue(response.result.file.url)
-                    }
-
-                }else{
+                // response.result.file 已在上面检查过非null，此处直接使用
+                if (!response.result.file.url.isNullOrEmpty()){
+                    Log.e("ceshi","载入代码返回数据为：${response.result.file.url}")
+                    loadCodeResult.postValue(response.result.file.url)
+                } else {
                     loadCodeResult.postValue("nothing")
                 }
 
@@ -628,6 +626,7 @@ class ChatViewModel :ViewModel(){
             Log.e("ceshi","0返回数据：${response.text}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
+                // assistantMessage 已从 response.text 获取，此处直接使用（允许为null时跳过）
                 if (assistantMessage != null) {
                     // 可以在这里更新 UI 显示结果
                     voiceToTextResult.postValue(assistantMessage)
@@ -682,13 +681,13 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             val assistantMessage = response.data?.url
 
-            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(assistantMessage!!)}")//https://api.302.ai/v1/audio/transcriptions
+            // 使用安全调用处理可能的null值
+            val safeUrl = assistantMessage ?: ""
+            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeUrl)}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                if (assistantMessage != null) {
-                    // 可以在这里更新 UI 显示结果
-                    imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(assistantMessage))
-                }
+                // 直接使用assistantMessage（已通过?:处理null）
+                imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(safeUrl))
             }
         }catch (e: SocketTimeoutException) {
             viewModelScope.launch(Dispatchers.Main) {
@@ -733,13 +732,13 @@ class ChatViewModel :ViewModel(){
             // 处理返回的响应数据
             val assistantMessage = response.data?.avatar_url
 
-            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(assistantMessage!!)}")//https://api.302.ai/v1/audio/transcriptions
+            // 使用安全调用处理可能的null值
+            val safeAvatarUrl = assistantMessage ?: ""
+            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeAvatarUrl)}")//https://api.302.ai/v1/audio/transcriptions
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI
-                if (assistantMessage != null) {
-                    // 可以在这里更新 UI 显示结果
-                    imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(assistantMessage))
-                }
+                // 直接使用safeAvatarUrl（已通过?:处理null）
+                imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(safeAvatarUrl))
             }
         }catch (e: SocketTimeoutException) {
             viewModelScope.launch(Dispatchers.Main) {
