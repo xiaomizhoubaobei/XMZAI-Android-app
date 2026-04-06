@@ -46,7 +46,7 @@ android {
             val propKeyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String?
             
             // 确定最终使用的配置值
-            val finalStoreFile = envStoreFile ?: propStoreFile
+            val finalStoreFile = envStoreFile ?: propStoreFile ?: "keystore/release.keystore"
             val finalStorePassword = envStorePassword ?: propStorePassword
             val finalKeyAlias = envKeyAlias ?: propKeyAlias
             val finalKeyPassword = envKeyPassword ?: propKeyPassword
