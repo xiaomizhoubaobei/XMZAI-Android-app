@@ -28,9 +28,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    // 检查是否配置了 Release 签名所需的全部凭证
+    // 检查是否配置了 Release 签名所需的凭证（RELEASE_STORE_FILE 有默认值，不强制要求）
     val hasReleaseCredentials = listOf(
-        System.getenv("RELEASE_STORE_FILE") ?: project.findProperty("RELEASE_STORE_FILE"),
         System.getenv("RELEASE_STORE_PASSWORD") ?: project.findProperty("RELEASE_STORE_PASSWORD"),
         System.getenv("RELEASE_KEY_ALIAS") ?: project.findProperty("RELEASE_KEY_ALIAS"),
         System.getenv("RELEASE_KEY_PASSWORD") ?: project.findProperty("RELEASE_KEY_PASSWORD")
@@ -39,13 +38,13 @@ android {
     signingConfigs {
         if (hasReleaseCredentials) {
             create("release") {
-                // 优先级：环境变量 > gradle.properties
+                // 优先级：环境变量 > gradle.properties > 默认值
                 val envStoreFile = System.getenv("RELEASE_STORE_FILE")
                 val envStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
                 val envKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
                 val envKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
 
-                storeFile = file(envStoreFile ?: project.findProperty("RELEASE_STORE_FILE") as String)
+                storeFile = file(envStoreFile ?: (project.findProperty("RELEASE_STORE_FILE") as String?) ?: "keystore/release.keystore")
                 storePassword = envStorePassword ?: project.findProperty("RELEASE_STORE_PASSWORD") as String
                 keyAlias = envKeyAlias ?: project.findProperty("RELEASE_KEY_ALIAS") as String
                 keyPassword = envKeyPassword ?: project.findProperty("RELEASE_KEY_PASSWORD") as String
