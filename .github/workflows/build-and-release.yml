@@ -76,7 +76,7 @@ jobs:
       run: |
         # 获取最近的提交记录（最多10条）
         COMMITS=$(git log --oneline -10 --no-merges)
-        BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+        BUILD_TIME=$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')
         SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
 
         # 生成变更日志
