@@ -71,7 +71,9 @@
     <string name="login_button_message">立即登录</string>
     <string name="setting_title_message">设置</string>
     <string name="setting_account_message">302.AI账号</string>
-    <string name="setting_balance_message">余额</string>Consumption details
+    <string name="setting_balance_message">余额</string>
+    <string name="setting_top_up_message">充值</string>
+    <string name="setting_consumption_details_message">消费详情</string>
     <string name="setting_language_message">语言</string>
     <string name="setting_theme_message">主题</string>
     <string name="setting_preference_message">偏好设置</string>

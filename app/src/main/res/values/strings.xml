@@ -93,6 +93,8 @@
     <string name="setting_light_message">Light</string>
     <string name="setting_night_message">Dark</string>
     <string name="setting_system_message">Follow the system</string>
+    <string name="setting_top_up_message">Top Up</string>
+    <string name="setting_consumption_details_message">Consumption details</string>
 
     <string name="announcement_details_title_message">Announcement details</string>
     <string name="announcement_details_one_message">302.AI sincerely invites you to join the AI technology exchange group</string>
