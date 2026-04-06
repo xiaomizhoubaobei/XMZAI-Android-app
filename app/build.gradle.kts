@@ -175,22 +175,6 @@ dependencies {
     //判断手机运营商的库
     implementation("io.michaelrocks:libphonenumber-android:8.13.35")
 
-    //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ndk")
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-messaging")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-messaging-directboot")
-    implementation("com.google.firebase:firebase-config")
-    implementation("com.google.android.gms:play-services-analytics:18.1.0")
-    implementation("com.google.android.gms:play-services-gcm:17.0.0")
-
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
     //switchButton
     implementation("com.kyleduo.switchbutton:library:2.1.0")
 
