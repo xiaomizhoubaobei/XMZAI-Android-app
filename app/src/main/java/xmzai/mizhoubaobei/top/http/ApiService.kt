@@ -23,9 +23,7 @@ import java.io.InputStreamReader
  */
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
-import retrofit2.http.Path
-import kotlinx.coroutines.Deferred
-import okhttp3.MultipartBody
+import retrofit2.http.POST
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -39,9 +37,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 
 interface ApiService {
-    @GET("users/{userId}")
-    fun getUserAsync(@Path("userId") userId: String): Deferred<User>
-
     @POST("v1/chat/completions")
     suspend fun postChatCompletion(
         @Header("Accept") accept: String = "application/json",
@@ -302,13 +297,6 @@ data class QuestionMessage(
     val type: String,
     val text: String
 )
-
-data class User(
-    val id: String,
-    val name: String,
-    val email: String
-)
-
 
 data class AudioToTextRequest(
     val model: String = "gpt-3.5-turbo-web-search",

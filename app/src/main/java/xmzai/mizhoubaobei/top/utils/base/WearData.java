@@ -30,26 +30,12 @@ public class WearData {
         return instance;
     }
 
-    /**
-     * 保持Token
-     */
-    public void saveToken(String token) {
-        SPUtils.getInstance().put(SPKeyConstance.USER_LOGIN_SUCCESS, token);
-    }
-
-    /**
-     * 获取token
-     */
-    public String getToken() {
-        return SPUtils.getInstance().getString(SPKeyConstance.USER_LOGIN_SUCCESS);
-    }
-
     public void saveGetModelList(Boolean isGet) {
         SPUtils.getInstance().put(SPKeyConstance.GET_MODEL_LIST_SUCCESS, isGet);
     }
 
     /**
-     * 获取token
+     * 获取模型列表状态
      */
     public Boolean getGetModelList() {
         return SPUtils.getInstance().getBoolean(SPKeyConstance.GET_MODEL_LIST_SUCCESS);

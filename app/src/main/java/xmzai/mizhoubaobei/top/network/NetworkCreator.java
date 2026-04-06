@@ -11,16 +11,10 @@ package xmzai.mizhoubaobei.top.network;
 
 import xmzai.mizhoubaobei.top.network.common_bean.callback.ResponseCallback;
 import xmzai.mizhoubaobei.top.network.converter.JsonConverterFactory;
-import xmzai.mizhoubaobei.top.network.cookie.ClearableCookieJar;
-import xmzai.mizhoubaobei.top.network.cookie.PersistentCookieJar;
-import xmzai.mizhoubaobei.top.network.cookie.cache.SetCookieCache;
-import xmzai.mizhoubaobei.top.network.cookie.persistence.SharedPrefsCookiePersistor;
 import xmzai.mizhoubaobei.top.utils.base.WearUtil;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -73,28 +67,18 @@ public class NetworkCreator {
         private static final int TIME_OUT = 30;
         private static final RequestInterceptor interceptor = RequestInterceptor.getInstance();
 
-        //设置网络缓存路径 缓存大小为10M
-//        private static final Cache cache = new Cache(new File(WearUtil.getApplication().getExternalCacheDir(), "SurfeaseHttpCache"),
-//                1024 * 1024 * 10);
-//        private static final ClearableCookieJar cookieJar =
-//                new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(WearUtil.getApplication()));
-
         private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder()
-//                .cache(cache)
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
-//                .cookieJar(cookieJar)
                 .addInterceptor(interceptor)   // 添加拦截器，实现缓存以及一些请求头
                 .build();
 
         private static OkHttpClient getOkHttpClient(ResponseCallback callback) {
             return new OkHttpClient.Builder()
-//                    .cache(cache)
                     .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                     .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                     .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
-//                    .cookieJar(cookieJar)
                     .addInterceptor(new RequestInterceptor(callback))   // 添加拦截器，实现缓存以及一些请求头
                     .build();
         }

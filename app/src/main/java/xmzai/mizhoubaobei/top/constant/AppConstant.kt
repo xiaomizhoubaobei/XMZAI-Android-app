@@ -18,6 +18,5 @@ package xmzai.mizhoubaobei.top.constant
  */
 object AppConstant {
 
-    val loginForm = "proxy302"
     val device = "android"
 }

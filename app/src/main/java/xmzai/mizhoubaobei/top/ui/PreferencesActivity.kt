@@ -102,7 +102,7 @@ class PreferencesActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         lifecycleScope.launch(Dispatchers.IO) {
-            val userId = dataStoreManager.readUserEmailData.first()?:""
+            val userId = ""  // 用户认证已移除，使用空字符串
             var userConfigurationRoom = chatDatabase.chatDao().getUserConfigByUserId(userId)
             userConfigurationRoom?.slideBottomSwitch = isSlideBottomSwitch
             userConfigurationRoom?.useTracelessSwitch = isUseTracelessSwitch

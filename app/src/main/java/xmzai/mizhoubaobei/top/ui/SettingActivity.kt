@@ -85,7 +85,6 @@ import xmzai.mizhoubaobei.top.utils.SystemUtils
 import xmzai.mizhoubaobei.top.utils.ThemeUtil
 import xmzai.mizhoubaobei.top.utils.ToastUtils
 import xmzai.mizhoubaobei.top.utils.ViewAnimationUtils
-import xmzai.mizhoubaobei.top.utils.base.WearData
 import xmzai.mizhoubaobei.top.utils.base.WearUtil
 import xmzai.mizhoubaobei.top.widget.utils.CommonEnum
 import xmzai.mizhoubaobei.top.widget.utils.CommonHtmlUtil
@@ -101,8 +100,6 @@ class SettingActivity : BaseActivity() {
     private lateinit var dataStoreManager: DataStoreManager
     private var mQuickAccessBean: HtmlQuickAccessBean? = null
     private var mWebView: BridgeWebView? = null
-    @Volatile
-    private var personalCenter = false
     private lateinit var chatDatabase: ChatDatabase
     private lateinit var modelListNull:MutableList<String>
 
@@ -627,7 +624,7 @@ class SettingActivity : BaseActivity() {
         when (type) {
             CommonEnum.LoadHtmlType.NEED_SPLICED_PARA -> {
                 url =
-                    WearUtil.APP_SERVER_HTTPS_HTML + htmlUrl + WearData.getInstance().token + "/?device=" + AppConstant.device
+                    WearUtil.APP_SERVER_HTTPS_HTML + htmlUrl + "/?device=" + AppConstant.device
             }
 
             CommonEnum.LoadHtmlType.NOT_NEED_SPLICED_PARA -> {
@@ -641,16 +638,6 @@ class SettingActivity : BaseActivity() {
 
         LogUtils.e("ceshi  url是什么=================：", url)
         mWebView?.loadUrl(url)
-        if(url == "https://dash.proxy302.com/webapp/user-center"){
-            lifecycleScope.launch {
-                delay(2000)
-                personalCenter = true
-            }
-            lifecycleScope.launch {
-                delay(2000)
-                Log.e("ceshi","personalCenter>>>$personalCenter")
-            }
-        }
         //mWebView?.callHandler(CommonHtmlUtil.handlerName, url, null)
         //mWebView?.callHandler(CommonHtmlUtil.handlerNamePara, url, null)
         mWebView?.registerHandler(CommonHtmlUtil.handlerNamePara, object : BridgeHandler {
@@ -726,7 +713,6 @@ class SettingActivity : BaseActivity() {
             val readImageUrl = dataStoreManager.readImageUrl.first()?:""
             val readBuildTitleModelType = dataStoreManager.readBuildTitleModelType.first()?:"gpt-4o"
             val readModelType = dataStoreManager.readModelType.first()?:"gemini-2.5-flash-nothink"
-            val readUserEmailData = dataStoreManager.readUserEmailData.first()?:""
             val systemLanguage = LanguageUtil.getSavedLanguage(this@SettingActivity)
             val systemTheme = SystemUtils.getSystemTheme(this@SettingActivity)
             val readSlideBottomSwitch = dataStoreManager.readSlideBottomSwitch.first()?:false
@@ -735,7 +721,7 @@ class SettingActivity : BaseActivity() {
             val readSearchServiceType = dataStoreManager.readSearchServiceType.first()?:"search1api"
             val readBuildTitleTime = dataStoreManager.readBuildTitleTime.first()?:"第一次对话"
 
-            chatDatabase.chatDao().insertUserConfig(UserConfigurationRoom(0,readUserEmailData,systemLanguage,"light",readUseTracelessSwitch,
+            chatDatabase.chatDao().insertUserConfig(UserConfigurationRoom(0,"",systemLanguage,"light",readUseTracelessSwitch,
                 readSlideBottomSwitch,readImageUrl,readSearchServiceType,readModelType,readBuildTitleModelType,modelList,readBuildTitleTime))
             //dataStoreManager.saveAppEmojisData("\uD83D\uDE00")
             dataStoreManager.saveImageUrl("")
@@ -746,7 +732,6 @@ class SettingActivity : BaseActivity() {
             dataStoreManager.saveSlideBottomSwitch(false)
             dataStoreManager.saveUseTracelessSwitch(false)
             dataStoreManager.saveBuildTitleTimeData("第一次对话")
-            //dataStoreManager.saveUserEmail("")  // 用户认证已移除
         }
 
 

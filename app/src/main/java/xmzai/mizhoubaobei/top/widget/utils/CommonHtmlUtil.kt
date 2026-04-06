@@ -23,13 +23,12 @@ class CommonHtmlUtil {
         val handlerNamePara = "testiOSCallback" //统一配置名称 与 H5数据交换 截获data数据
 
         //跳转页面链接
-        val totalHtmlPath = "/webapp/authentication/"   //汇总
         val dynamicTrafficHtmlPath = "/webapp/proxy/dynamic/traffic"  //动态IP - 按流量计费
         val dynamicIpHtmlPath = "/webapp/proxy/dynamic/ip"  //动态IP - 按IP计费
         val staticTrafficHtmlPath = "/webapp/proxy/static/traffic"  //静态IP  - 按流量计费
         val staticIpHtmlPath = "/webapp/proxy/static/ip" //静态IP  - 按IP计费
         val quickAccessHtmlPath = "/webapp/quick-access"   //快捷访问
-        val userCenterHtmlPath = "/webapp/user-center"  //个人中心
+        val userCenterHtmlPath = ""  //已废弃
         val helpCenterHtmlPath = "https://proxy302.helplook.com/"  //帮助中心
 
         //json数据格式
@@ -37,7 +36,6 @@ class CommonHtmlUtil {
         val htmlData = "data"
 
         //交互事件
-        val logoutHtml = "logout" //登出
         val proxyHtml = "proxy"  //代理
         val goLinkHtml = "goLink" //链接
         val quickAccessHtml = "quick-access" //快速访问

@@ -505,8 +505,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 prompt = it
             }
 
-            val readUserNameData = dataStoreManager.readUserNameData.first()
-
 
             val readTemperatureValue = dataStoreManager.readTemperatureValue.first()
             readTemperatureValue?.let {
@@ -544,9 +542,9 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 buildTitleModelType = it
             }
 
-            val readUserEmailData = dataStoreManager.readUserEmailData.first()?:""
-            Log.e("ceshi","获取账号$readUserEmailData")
-            if (readUserEmailData != ""){
+            val readData = dataStoreManager.readData.first()?:""
+            Log.e("ceshi","获取API Key状态$readData")
+            if (readData != ""){
                 isTrueApiKey = true
             }
 
@@ -581,10 +579,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 }
 
 
-                readUserNameData?.let {
-                    Log.e("setting","readUserNameData：$it")
-                    binding.userName.text = it
-                }
                 slideBottom()
                 if (messageList.isEmpty()){
                     if (isUseTracelessSwitch){
@@ -1867,9 +1861,9 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
 
                     dataStoreManager.saveModelList(modelList)
 
-                    val readUserEmailData = dataStoreManager.readUserEmailData.first()?:""
-                    Log.e("ceshi","获取账号$readUserEmailData")
-                    if (readUserEmailData != ""){
+                    val readData = dataStoreManager.readData.first()?:""
+                    Log.e("ceshi","获取API Key状态$readData")
+                    if (readData != ""){
                         isTrueApiKey = true
                         lifecycleScope.launch(Dispatchers.Main) {
                             binding.modeTypeTv.visibility = View.VISIBLE
@@ -3613,11 +3607,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
         Toast.makeText(this, "请先配置API Key", Toast.LENGTH_SHORT).show()
     }
 
-    private fun toLogin(){
-        // 302用户管理系统已移除，登录功能不再可用
-        showNoApikeyToast()
-    }
-
     private fun showRenameDialog(position: Int,oldName:String) {
         val dialog = RenameDialog(this,oldName)
         //dialog.setDefaultName("原来的名字") // 设置输入框默认文本
@@ -4080,55 +4069,6 @@ class MainActivity : BaseActivity(), OnItemClickListener, OnWordPrintOverClickLi
                 @Suppress("DEPRECATION")
                 vibrator.vibrate(60) // 震动30毫秒
             }
-        }
-    }
-
-    private fun insertUserConfiguration(userId:String){
-        lifecycleScope.launch(Dispatchers.IO) {
-            val mUserId = dataStoreManager.readUserEmailData.first()?:""
-            if (mUserId == ""){
-                dataStoreManager.saveUserEmail(userId)
-                val userConfigurationRoom = chatDatabase.chatDao().getUserConfigByUserId(userId)
-                Log.e("ceshi","获取的配置信息:$userConfigurationRoom")
-                if (userConfigurationRoom != null){
-                    userConfigurationRoom?.let {
-                        //val readAppEmojisData = userConfigurationRoom.appEmojisData
-                        val readImageUrl = userConfigurationRoom.appEmojisData
-                        mReadImageUrl = readImageUrl
-                        val readBuildTitleModelType = userConfigurationRoom.defaultBuildTitleModelType
-                        val readModelType = userConfigurationRoom.defaultChatModelType
-                        val readUserEmailData = userConfigurationRoom.userId
-                        val systemLanguage = userConfigurationRoom.systemLanguage
-                        val systemTheme = userConfigurationRoom.systemTheme
-                        val readSlideBottomSwitch = userConfigurationRoom.slideBottomSwitch
-                        val readUseTracelessSwitch = userConfigurationRoom.useTracelessSwitch
-                        val modelList = userConfigurationRoom.modelList
-                        val readSearchServiceType = userConfigurationRoom.searchServiceType
-                        val readBuildTitleTime = userConfigurationRoom.buildTitleTime
-                        //插入相对应数据库
-                        //dataStoreManager.saveAppEmojisData(readAppEmojisData)
-                        dataStoreManager.saveImageUrl(readImageUrl)
-                        dataStoreManager.saveBuildTitleModeTypeData(readBuildTitleModelType)
-                        dataStoreManager.saveModelType(readModelType)
-                        dataStoreManager.saveModelList(modelList)
-                        dataStoreManager.saveSearchServiceTypeData(readSearchServiceType)
-                        dataStoreManager.saveSlideBottomSwitch(readSlideBottomSwitch)
-                        dataStoreManager.saveUseTracelessSwitch(readUseTracelessSwitch)
-                        dataStoreManager.saveBuildTitleTimeData(readBuildTitleTime)
-
-
-
-                        /*if (modelList.isNullOrEmpty()){
-                            dataStoreManager.saveModelList(modelList)
-                        }*/
-
-                        LanguageUtil.saveLanguageSetting(this@MainActivity, systemLanguage)
-                    }
-            }
-
-            }
-
-
         }
     }
 

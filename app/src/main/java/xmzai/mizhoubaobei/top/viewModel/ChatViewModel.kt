@@ -97,9 +97,7 @@ class ChatViewModel :ViewModel(){
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     suspend fun sendQuestion1(question:String,modelType:String,isNetWorkThink:Boolean,isDeepThink:Boolean,context:Context,userId:String,imageUrlServiceResult:String,isPrompt:Boolean,apikey: String,isExtract:Boolean,apiService:ApiService){
         Log.e("ceshi","sendQuestion1$apikey")
-        val authorizationToken = "Bearer sk-uuhpqdroarauzlltffpybpnvoskghjnlmstmdzynjizybtcb"
-        //val authorizationToken = "Bearer $apikey"//sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA
-        //val authorizationToken1 = "sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA"
+        val authorizationToken = "Bearer $apikey"
         Log.e("ceshi","0deep:$isDeepThink,,web:$isNetWorkThink")
         var extract = ""
 //        if (isExtract){
@@ -527,7 +525,6 @@ class ChatViewModel :ViewModel(){
                             needCompress: Boolean = false, // 默认为不压缩
                             apiService:ApiService
         ){
-        val authorizationToken = "Bearer sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA"
         // 动态获取文件MIME类型（推荐）
         val mimeType = MimeTypeMap.getSingleton()
             .getMimeTypeFromExtension(file.extension) ?: "application/octet-stream"
@@ -551,61 +548,6 @@ class ChatViewModel :ViewModel(){
             viewModelScope.launch(Dispatchers.Main) {
                 // 在主线程更新 UI - 仅当URL有效时传递给UI层
                 safeUrl?.let { url ->
-                    imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(url))
-                }
-            }
-        }catch (e: SocketTimeoutException) {
-            viewModelScope.launch(Dispatchers.Main) {
-                //questionResult.value = "网络请求超时，请重试"
-            }
-        }
-        catch (e: HttpException) {
-            // 处理 HTTP 错误
-            viewModelScope.launch(Dispatchers.Main) {
-
-            }
-        } catch (e: IOException) {
-            // 处理网络错误
-        } catch (e: retrofit2.HttpException) {
-            viewModelScope.launch(Dispatchers.Main) {
-                Toast.makeText(context, "请求错误，请重试", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun upLoadImageUser(context: Context, // 用于获取文件路径或处理UI（可选）
-                            file: File,
-                            prefix: String, // 默认为图片参数
-                            needCompress: Boolean = false, // 默认为不压缩
-                            apiService:ApiService,
-                                token:String
-    ){
-        //val authorizationToken = "Bearer sk-RcnM7qzDdqa3i4mylTGPSl5peJzu8CNMx2pe6cauC0es3JCA"
-        val authorizationToken = "Bearer $token"
-        // 动态获取文件MIME类型（推荐）
-        val mimeType = MimeTypeMap.getSingleton()
-            .getMimeTypeFromExtension(file.extension) ?: "application/octet-stream"
-        val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
-        val filePart = MultipartBody.Part.createFormData("avatar_file", file.name, requestBody)
-
-
-        try {
-            val response = apiService.uploadImageUser(
-                authorizationToken,filePart,  needCompress
-            )
-            // 处理返回的响应数据
-            val assistantMessage = response.data?.avatar_url
-
-            // 使用安全调用处理可能的null值,并校验非空
-            val safeAvatarUrl = assistantMessage?.takeIf { it.isNotEmpty() }
-            if (safeAvatarUrl == null) {
-                Log.w("ceshi", "返回的avatar_url为空或null")
-            }
-            Log.e("ceshi","0返回数据url：${SystemUtils.replaceUrlString(safeAvatarUrl ?: "")}")//https://api.302.ai/v1/audio/transcriptions
-            viewModelScope.launch(Dispatchers.Main) {
-                // 在主线程更新 UI - 仅当URL有效时传递给UI层
-                safeAvatarUrl?.let { url ->
                     imageUrlServiceResult.postValue(SystemUtils.replaceUrlString(url))
                 }
             }

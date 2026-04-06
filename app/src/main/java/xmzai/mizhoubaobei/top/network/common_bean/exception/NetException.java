@@ -18,12 +18,8 @@ package xmzai.mizhoubaobei.top.network.common_bean.exception;
  */
 public class NetException extends RuntimeException {
     // 通用错误
-    public static String VERIFICATION_CODE_ERROR = "900";  //验证码错误
-    public static String LOGIN_WRONG_PASSWORD = "604";  //登录密码错误
     public static String RESPONSE_SUCCESS = "success";  //接口响应成功
     public static String RESPONSE_FAIL = "fail";        //接口响应失败
-    public static String NO_REGISTER = "2000";        //该邮箱账号未注册
-    public static String ALREADY_REGISTERED = "605"; //该邮箱已经注册
 
     public static String SERVICE_DATA_ERROR = ""; //服务器数据错误
     public static String LOCAL_UN_DEFINE_ERROR = "A000";  // 未归类的错误 localUnDefineError
