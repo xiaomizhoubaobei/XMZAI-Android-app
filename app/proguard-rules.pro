@@ -108,7 +108,7 @@
 # ============================================================
 
 # 保留 Gson 类型适配器
--keep,allowobfuscation attributes Signature
+-keepattributes Signature
 -keep attributes *Annotation*
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.** { *; }
@@ -139,10 +139,9 @@
 -keep class com.alibaba.fastjson.serializer.** { *; }
 -keep class com.alibaba.fastjson.parser.** { *; }
 
-# 保留 FastJSON 序列化的实体类
+# 保留 FastJSON 序列化的实体类（仅保留 @JSONField 注解字段）
 -keepclassmembers class * {
-    <fields>;
-    <methods>;
+    @com.alibaba.fastjson.annotation.JSONField <fields>;
 }
 
 # ============================================================
@@ -210,6 +209,23 @@
 
 -keep class * extends androidx.room.RoomDatabase
 -dontwarn androidx.room.paging.**
+
+# Room Entity、DAO keep 规则（Room 使用注解处理器生成实现）
+-keep @androidx.room.Entity class *
+-dontwarn androidx.room.Entity
+
+-keep @androidx.room.Dao interface *
+-dontwarn androidx.room.Dao
+
+# 保留 Room 的 TypeConverter
+-keepclassmembers,allowobfuscation class * {
+    @androidx.room.TypeConverter <methods>;
+}
+
+# 保留 Room 数据库相关类的字段
+-keepclassmembers class * extends androidx.room.RoomDatabase {
+    *** Dao;
+}
 
 # ============================================================
 # Glide
