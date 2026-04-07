@@ -66,9 +66,6 @@
 -keepattributes RuntimeVisibleParameterAnnotations
 -keepattributes RuntimeInvisibleParameterAnnotations
 
--keepattributes Signature
--keepattributes Exceptions
-
 # 保留 Retrofit 的 Service 接口
 -keep,allowobfuscation interface retrofit2.Call
 -keep,allowobfuscation interface * extends retrofit2.Call
@@ -109,7 +106,7 @@
 
 # 保留 Gson 类型适配器
 -keepattributes Signature
--keep attributes *Annotation*
+-keepattributes *Annotation*
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.** { *; }
 -keep class com.google.gson.reflect.TypeToken { *; }
@@ -136,8 +133,6 @@
 
 -dontwarn com.alibaba.fastjson.**
 -keep class com.alibaba.fastjson.** { *; }
--keep class com.alibaba.fastjson.serializer.** { *; }
--keep class com.alibaba.fastjson.parser.** { *; }
 
 # 保留 FastJSON 序列化的实体类（仅保留 @JSONField 注解字段）
 -keepclassmembers class * {
@@ -148,7 +143,6 @@
 # EventBus
 # ============================================================
 
--keepattributes *Annotation*
 -keepclassmembers class * {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
@@ -164,8 +158,6 @@
 # ============================================================
 
 -keep class com.tencent.mmkv.** { *; }
--keep class com.tencent.mmkv.MMKV { *; }
--keep class com.tencent.mmkv.MMKVContentProvider { *; }
 
 # ============================================================
 # kotlinx-serialization
@@ -242,13 +234,6 @@
 
 -dontwarn com.airbnb.lottie.**
 -keep class com.airbnb.lottie.** { *; }
-
-# ============================================================
-# DataStore
-# ============================================================
-
--dontwarn androidx.datastore.**
--keep class androidx.datastore.** { *; }
 
 # ============================================================
 # RxJava / RxAndroid
