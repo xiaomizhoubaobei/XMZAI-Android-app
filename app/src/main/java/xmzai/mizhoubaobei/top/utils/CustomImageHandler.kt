@@ -302,6 +302,7 @@ class CustomImgTagHandler(
         }
 
         // TODO: getOpacity() 已弃用，升级 compileSdk 至 33+ 后可使用 getAlpha() 替代
+        @Deprecated("Use getAlpha() instead", ReplaceWith("getAlpha()"))
         @Suppress("DEPRECATION")
         override fun getOpacity(): Int = android.graphics.PixelFormat.TRANSLUCENT
     }
